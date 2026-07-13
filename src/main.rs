@@ -9,9 +9,10 @@
 mod types;
 mod parser;
 mod modules;
-mod diagnostics;
 mod dispatcher;
 mod routes;
+pub mod state;
+use crate::state::AppState;
 
 use axum::{routing::{get, post}, Router};
 use std::sync::Arc;

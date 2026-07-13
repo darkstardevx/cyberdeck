@@ -1,65 +1,64 @@
-use std::fs::{self, OpenOptions};
+//! # CYBERDECK: Hardware Intelligence Module
+//!
+//! Provides a deep-dive inventory of the system's physical components.
+//!
+//! ## Implementation Notes
+//! - **DMI/BIOS Audit**: Extracts motherboard, chassis, and BIOS details via `dmidecode`.
+//! - **Bus Scanning**: Catalogs PCI/USB peripherals.
+//! - **Graceful Degradation**: Handles missing diagnostic tools (lshw/dmidecode) by providing fallback info.
+
+use std::fs;
 use std::io::Write;
 use std::process::Command;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-pub async fn execute_hardware_module(dir: &str) -> std::io::Result<String> {
-    // 1. Target Output Architecture Configurations
+use crate::state::AppState;
+
+/// Executes the hardware intelligence diagnostic suite.
+pub async fn execute(_state: &AppState, params: &str) -> Result<String, String> {
+    let dir = params;
     let base_f = format!("{}/hardware.md", dir);
+    let timestamp = SystemTime::now()
+    .duration_since(UNIX_EPOCH)
+    .map_err(|e| e.to_string())?
+    .as_secs();
 
-    // Reusable file writing handlers
-    let write_to = |path: &str, content: &str| -> std::io::Result<()> {
-        let mut file = OpenOptions::new().create(true).append(true).open(path)?;
-        file.write_all(content.as_bytes())?;
-        Ok(())
-    };
-
-    let overwrite_to = |path: &str, content: &str| -> std::io::Result<()> {
-        let mut file = OpenOptions::new().create(true).write(true).truncate(true).open(path)?;
-        file.write_all(content.as_bytes())?;
-        Ok(())
-    };
-
+    // Helper: Shell execution with result capture
     let run_cmd = |cmd: &str, args: &[&str]| -> String {
         Command::new(cmd)
         .args(args)
         .output()
         .map(|out| String::from_utf8_lossy(&out.stdout).to_string())
-        .unwrap_or_default()
+        .unwrap_or_else(|_| "Unavailable".to_string())
     };
 
-    let timestamp = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
+    let mut report = format!("<div style='background:#6a0dad;color:white;padding:6px;'>🖥️ CYBERDECK: HARDWARE CORE REPORT</div>\n\nTimestamp: {}\n\n", timestamp);
 
-    // 2. Base Header Configuration
-    overwrite_to(&base_f, "<div style='background:#6a0dad;color:white;padding:6px;'>🖥️ HARDWARE CORE REPORT</div>\n\n")?;
-    write_to(&base_f, &format!("Timestamp: {}\n\n", timestamp))?;
+    // 1. DMI / System Board
+    report.push_str("## 🏛️ System Board & BIOS\n```text\n");
+    let dmi = run_cmd("dmidecode", &["-t", "system,baseboard,bios"]);
+    report.push_str(if dmi.contains("Permission denied") { "Access denied (run as root for full info)\n" } else { &dmi });
+    report.push_str("```\n");
 
-    // 3. Central Processor Profile Matrix
-    write_to(&base_f, "## 🧠 CPU\n")?;
-    write_to(&base_f, &run_cmd("lscpu", &[]))?;
+    // 2. CPU Profile
+    report.push_str("\n## 🧠 Processor (CPU)\n```text\n");
+    report.push_str(&run_cmd("lscpu", &[]));
+    report.push_str("```\n");
 
-    // 4. Peripheral Component Interconnect Mapping
-    write_to(&base_f, "\n## 🧩 PCI DEVICES\n")?;
-    write_to(&base_f, &run_cmd("lspci", &[]))?;
+    // 3. PCI/USB Bus Mapping
+    report.push_str("\n## 🧩 PCI & USB Peripherals\n");
+    report.push_str("### PCI\n```text\n");
+    report.push_str(&run_cmd("lspci", &[]));
+    report.push_str("```\n### USB\n```text\n");
+    report.push_str(&run_cmd("lsusb", &[]));
+    report.push_str("```\n");
 
-    // 5. Universal Serial Bus Node Mappings
-    write_to(&base_f, "\n## 🔌 USB DEVICES\n")?;
-    write_to(&base_f, &run_cmd("lsusb", &[]))?;
+    // 4. Hardware Tree (lshw fallback)
+    report.push_str("\n## ⚙️ Hardware Tree\n```text\n");
+    let lshw = run_cmd("lshw", &["-short"]);
+    report.push_str(if lshw.is_empty() || lshw.contains("not found") { "lshw not installed or permission denied" } else { &lshw });
+    report.push_str("\n```\n");
 
-    // 6. Deep Structural Hardware Subsystem Tree Listing
-    write_to(&base_f, "\n## ⚙️ DETAILED HARDWARE TREE\n")?;
-    let lshw_out = run_cmd("sudo", &["lshw", "-short"]);
-    if !lshw_out.is_empty() {
-        write_to(&base_f, &lshw_out)?;
-    } else {
-        write_to(&base_f, "lshw diagnostics unavailable\n")?;
-    }
-
-    // 7. Engine Cache Exporter Sync Hook
-    if let Ok(cache_dir) = std::env::var("CYBERDECK_CACHE_DIR") {
-        let _ = fs::create_dir_all(&cache_dir);
-        let _ = fs::copy(&base_f, format!("{}/hardware.md", cache_dir));
-    }
-
+    fs::write(&base_f, report).map_err(|e| e.to_string())?;
     Ok(base_f)
 }

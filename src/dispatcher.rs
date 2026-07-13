@@ -1,18 +1,28 @@
 //! # CYBERDECK Dispatcher
 //!
 //! The command execution engine for the CYBERDECK system.
-//! This module handles the interpretation and routing of system commands,
-//! managing state updates and asynchronous diagnostic/module execution.
-
-#![warn(missing_docs)]
+//!
+//! This module acts as the central router for system operations, bridging the
+//! gap between the `CyberdeckCommand` enum and specific hardware/diagnostic modules.
+//! It manages asynchronous execution, thread-safe state mutation, and uniform
+//! logging of system events.
 
 use std::time::{SystemTime, UNIX_EPOCH};
 use crate::types::{SharedCyberdeckState, CyberdeckCommand};
-use crate::modules::{audio, bios, disks, ethernet, fan, hardware, network, storage_ai, thermal_ai};
-use crate::diagnostics::{battery, cpu, motherboard, memory, power};
+// Consolidated imports: All modules are now under crate::modules
+use crate::modules::{
+    audio, battery, bios, cpu, dashboard, disks, fan, hardware,
+    memory, motherboard, network, power, services, storage_ai, thermal_ai
+};
 
-/// Executes a given CyberdeckCommand by acquiring the shared state lock,
-/// performing the requested operation, and updating the system execution log.
+/// Executes a given `CyberdeckCommand` by acquiring the shared state lock,
+/// performing the requested operation via appropriate modules, and logging the outcome.
+///
+/// This function handles the lifecycle of command execution:
+/// 1. Locks the `SharedCyberdeckState`.
+/// 2. Records the initiation of the command in the execution log.
+/// 3. Drops the lock to allow asynchronous execution of the module.
+/// 4. Re-acquires the lock to log the final result of the operation.
 pub async fn execute_cyberdeck_command(cmd: CyberdeckCommand, state: &SharedCyberdeckState) {
     let mut s = state.lock().await;
     let timestamp = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
@@ -32,113 +42,79 @@ pub async fn execute_cyberdeck_command(cmd: CyberdeckCommand, state: &SharedCybe
         }
         CyberdeckCommand::GenerateReport => {
             s.reports_generated += 1;
-            // 1. Extract the value into a local variable first (this is an immutable copy)
             let current_report_num = s.reports_generated;
-
-            // 2. Now pass that local variable to the formatter.
-            // s is now free to be borrowed mutably by log_event.
-            log_event(
-                &mut s.execution_log,
-                format!("System Report #{} generated.", current_report_num)
-            );
+            log_event(&mut s.execution_log, format!("System Report #{} generated.", current_report_num));
         }
 
-        // --- Diagnostics ---
-        CyberdeckCommand::RunBatteryModule(p) => {
-            log_event(&mut s.execution_log, format!("Launching Battery: {}", p));
-            drop(s);
-            if let Ok(res) = battery::execute(&p).await {
-                state.lock().await.execution_log.push(format!("[{}] Battery: {}", timestamp, res));
-            }
-        }
-        CyberdeckCommand::RunCpuModule(p) => {
-            log_event(&mut s.execution_log, format!("Launching CPU: {}", p));
-            drop(s);
-            if let Ok(res) = cpu::execute(&p).await {
-                state.lock().await.execution_log.push(format!("[{}] CPU: {}", timestamp, res));
-            }
-        }
-        CyberdeckCommand::RunMemoryModule(p) => {
-            log_event(&mut s.execution_log, format!("Launching Memory: {}", p));
-            drop(s);
-            if let Ok(res) = memory::execute(&p).await {
-                state.lock().await.execution_log.push(format!("[{}] Memory: {}", timestamp, res));
-            }
-        }
-        CyberdeckCommand::RunMotherboardModule(p) => {
-            log_event(&mut s.execution_log, format!("Launching Motherboard: {}", p));
-            drop(s);
-            if let Ok(res) = motherboard::execute(&p).await {
-                state.lock().await.execution_log.push(format!("[{}] Motherboard: {}", timestamp, res));
-            }
-        }
-        CyberdeckCommand::RunPowerModule(p) => {
-            log_event(&mut s.execution_log, format!("Launching Power: {}", p));
-            drop(s);
-            if let Ok(res) = power::execute(&p).await {
-                state.lock().await.execution_log.push(format!("[{}] Power: {}", timestamp, res));
-            }
-        }
+        CyberdeckCommand::RunAudioModule(p) => run_module(state, &p, |params| {
+            // We clone the Arc to move it into the async block
+            let state_arc = state.clone();
+            async move {
+                // Lock the state to get the underlying AppState/CyberdeckState
+                let locked_state = state_arc.lock().await;
 
-        // --- Modules ---
-        CyberdeckCommand::RunAudioModule(p) => {
-            drop(s);
-            if let Ok(res) = audio::execute_audio_module(&p).await {
-                state.lock().await.execution_log.push(res);
+                // Pass the reference to the inner state
+                audio::execute(&locked_state.app_state, params)
+                .map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e))
             }
-        }
-        CyberdeckCommand::RunBiosModule(p) => {
-            drop(s);
-            if let Ok(res) = bios::execute_bios_module(&p).await {
-                state.lock().await.execution_log.push(res);
-            }
-        }
-        CyberdeckCommand::RunDisksModule(p) => {
-            drop(s);
-            if let Ok(res) = disks::execute_disks_module(&p).await {
-                state.lock().await.execution_log.push(res);
-            }
-        }
-        CyberdeckCommand::RunEthernetModule(p) => {
-            drop(s);
-            if let Ok(res) = ethernet::execute_ethernet_module(&p).await {
-                state.lock().await.execution_log.push(res);
-            }
-        }
-        CyberdeckCommand::RunFanModule(p) => {
-            drop(s);
-            if let Ok(res) = fan::execute_fan_module(&p).await {
-                state.lock().await.execution_log.push(res);
-            }
-        }
-        CyberdeckCommand::RunHardwareModule(p) => {
-            drop(s);
-            if let Ok(res) = hardware::execute_hardware_module(&p).await {
-                state.lock().await.execution_log.push(res);
-            }
-        }
-        CyberdeckCommand::RunNetworkModule(p) => {
-            drop(s);
-            if let Ok(res) = network::execute_network_module(&p).await {
-                state.lock().await.execution_log.push(res);
-            }
-        }
-        CyberdeckCommand::RunStorageAiModule(p) => {
-            drop(s);
-            if let Ok(res) = storage_ai::execute_storage_ai_module(&p).await {
-                state.lock().await.execution_log.push(res);
-            }
-        }
-        CyberdeckCommand::RunThermalModule(p) => {
-            drop(s);
-            if let Ok(res) = thermal_ai::execute_thermal_ai_module(&p).await {
-                state.lock().await.execution_log.push(res);
-            }
-        }
+        }).await,
+
+        // --- Consolidated Module Execution ---
+
+        // Standard Modules
+        CyberdeckCommand::RunAudioModule(p) => run_module(state, &p, |params| audio::execute(state, params)).await,
+        CyberdeckCommand::RunBatteryModule(p) => run_module(state, &p, |params| battery::execute(state, params)).await,
+        CyberdeckCommand::RunBiosModule(p) => run_module(state, &p, |params| bios::execute(state, params)).await,
+        CyberdeckCommand::RunCpuModule(p) => run_module(state, &p, |params| cpu::execute(state, params)).await,
+        CyberdeckCommand::RunDashboardModule(p) => run_module(state, &p, |params| dashboard::execute(state, params)).await,
+        CyberdeckCommand::RunDisksModule(p) => run_module(state, &p, |params| disks::execute(state, params)).await,
+        CyberdeckCommand::RunFanModule(p) => run_module(state, &p, |params| fan::execute(state, params)).await,
+        CyberdeckCommand::RunHardwareModule(p) => run_module(state, &p, |params| hardware::execute(state, params)).await,
+        CyberdeckCommand::RunMemoryModule(p) => run_module(state, &p, |params| memory::execute(state, params)).await,
+        CyberdeckCommand::RunMotherboardModule(p) => run_module(state, &p, |params| motherboard::execute(state, params)).await,
+        CyberdeckCommand::RunNetworkModule(p) => run_module(state, &p, |params| network::execute(state, params)).await,
+        CyberdeckCommand::RunPowerModule(p) => run_module(state, &p, |params| power::execute(state, params)).await,
+        CyberdeckCommand::RunServicesModule(p) => run_module(state, &p, |params| services::execute(state, params)).await,
+        CyberdeckCommand::RunStorageAiModule(p) => run_module(state, &p, |params| storage_ai::execute(state, params)).await,
+        CyberdeckCommand::RunThermalModule(p) => run_module(state, &p, |params| thermal_ai::execute(state, params)).await,
+
+        _ => println!("Command not implemented"),
 
         CyberdeckCommand::Unknown(u) => {
             log_event(&mut s.execution_log, format!("Unknown command: {}", u));
+
         }
-        _ => {}
+    }
+}
+
+/// Helper that handles diagnostic module execution, logs the start, and captures output.
+///
+/// This function is specifically for modules that return `Result<String, std::io::Error>`.
+/// It manages the drop/lock cycle to prevent holding the Mutex during long I/O operations.
+async fn execute_and_log<F, Fut>(
+    s: &mut crate::types::CyberdeckState,
+    state: &SharedCyberdeckState,
+    p: &str,
+    name: &str,
+    ts: u64,
+    exec_fn: F
+) where F: Fn(&str) -> Fut, Fut: std::future::Future<Output = std::io::Result<String>> {
+    s.execution_log.push(format!("[{}] Launching {}: {}", ts, name, p));
+    drop(s);
+
+    let log_msg = match exec_fn(p).await {
+        Ok(res) => format!("[{}] {}: {}", ts, name, res),
+        Err(e) => format!("[{}] {}: Error: {}", ts, name, e),
+    };
+
+    state.lock().await.execution_log.push(log_msg);
+}
+
+/// Helper for standard module execution where the log message is provided by the module.
+async fn run_module<F, Fut>(state: &SharedCyberdeckState, p: &str, exec_fn: F)
+where F: Fn(&str) -> Fut, Fut: std::future::Future<Output = std::io::Result<String>> {
+    match exec_fn(p).await {
+        Ok(res) => state.lock().await.execution_log.push(res),
+        Err(e) => state.lock().await.execution_log.push(format!("Error: {}", e)),
     }
 }

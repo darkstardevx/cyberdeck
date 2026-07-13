@@ -1,78 +1,75 @@
-use std::process::Command;
+//! # CYBERDECK: Live Dashboard
+//!
+//! Visualizes current system metrics via CLI output and generates
+//! a persistent state report in the dashboard directory.
+//!
+//! ## Implementation Notes
+//! - **Signature**: Matches the `execute(state, params)` project standard.
+//! - **Dual-Output**: Prints live status to stdout and saves diagnostic state to dashboard.md.
 
-pub async fn execute_dashboard_module() -> std::io::Result<()> {
-    // 1. Clear terminal screen
-    let _ = Command::new("clear").status();
+use std::fs;
+use std::process::Command;
+use crate::state::AppState;
+
+/// Executes the live dashboard diagnostic sweep.
+pub async fn execute(_state: &AppState, params: &str) -> Result<String, String> {
+    let dir = params;
+    let base_f = format!("{}/dashboard.md", dir);
+    let mut report = String::from("# 👁 CYBERDECK: LIVE DASHBOARD\n\n");
 
     let run_cmd = |cmd: &str, args: &[&str]| -> String {
         Command::new(cmd)
         .args(args)
         .output()
         .map(|out| String::from_utf8_lossy(&out.stdout).to_string())
-        .unwrap_or_default()
+        .unwrap_or_else(|_| "Unavailable".to_string())
     };
 
-    // 2. Banner Output
+    // Live Console Output
     println!("====================================");
     println!("     👁 CYBERDECK DASHBOARD");
     println!("====================================");
-    println!();
 
-    // 3. System Status
-    println!("🧠 SYSTEM STATUS");
-    print!("{}", run_cmd("uptime", &[]));
-    println!();
+    // 1. System Status
+    let uptime = run_cmd("uptime", &[]);
+    println!("🧠 SYSTEM STATUS: {}", uptime.trim());
+    report.push_str(&format!("## 🧠 System Status\n`{}`\n\n", uptime.trim()));
 
-    // 4. Processor Architecture Information
-    println!("🔥 CPU");
+    // 2. CPU
     let lscpu_out = run_cmd("lscpu", &[]);
-    if let Some(model_line) = lscpu_out.lines().find(|l| l.contains("Model name")) {
-        println!("{}", model_line.trim());
-    } else {
-        println!("CPU Model Name tracking unavailable");
-    }
-    println!();
+    let model = lscpu_out.lines()
+    .find(|l| l.contains("Model name"))
+    .unwrap_or("Unknown CPU")
+    .trim();
+    println!("🔥 CPU: {}", model);
+    report.push_str(&format!("## 🔥 CPU\n{}\n\n", model));
 
-    // 5. Thermal Core Profiles
-    println!("🌡 THERMALS");
-    let sensors_out = run_cmd("sensors", &[]);
-    if !sensors_out.is_empty() && !sensors_out.contains("not found") {
-        for line in sensors_out.lines().take(10) {
-            println!("{}", line);
-        }
-    } else {
-        println!("lm-sensors interface missing");
-    }
-    println!();
+    // 3. Storage
+    println!("💾 DISKS:");
+    let lsblk = run_cmd("lsblk", &["-d", "-o", "NAME,SIZE,MODEL"]);
+    print!("{}", lsblk);
+    report.push_str(&format!("## 💾 Disks\n```text\n{}```\n\n", lsblk));
 
-    // 6. Block Storage Mapping
-    println!("💾 DISKS");
-    print!("{}", run_cmd("lsblk", &["-d", "-o", "NAME,SIZE,MODEL"]));
-    println!();
+    // 4. Network
+    println!("🌐 NETWORK:");
+    let ip = run_cmd("ip", &["-br", "a"]);
+    print!("{}", ip);
+    report.push_str(&format!("## 🌐 Network\n```text\n{}```\n\n", ip));
 
-    // 7. Network Stack Interface Status
-    println!("🌐 NETWORK");
-    print!("{}", run_cmd("ip", &["-br", "a"]));
-    println!();
-
-    // 8. Energy System Profiles
-    println!("🔋 POWER");
-    let upower_devices = run_cmd("upower", &["-e"]);
-    if !upower_devices.is_empty() && !upower_devices.contains("not found") {
-        if let Some(first_dev) = upower_devices.lines().next() {
-            print!("{}", run_cmd("upower", &["-i", first_dev.trim()]));
-        } else {
-            println!("upower: no devices detected");
-        }
-    } else {
-        println!("upower layer inactive");
+    // 5. Power
+    println!("🔋 POWER:");
+    let power = run_cmd("upower", &["-e"]);
+    if !power.is_empty() {
+        let first_dev = power.lines().next().unwrap_or("");
+        let info = run_cmd("upower", &["-i", first_dev]);
+        println!("{}", info);
+        report.push_str(&format!("## 🔋 Power\n```text\n{}```\n\n", info));
     }
 
-    // 9. Footer Sign-off Block
-    println!();
     println!("====================================");
     println!("LIVE MODE ACTIVE");
     println!("====================================");
 
-    Ok(())
+    fs::write(&base_f, report).map_err(|e| e.to_string())?;
+    Ok(base_f)
 }

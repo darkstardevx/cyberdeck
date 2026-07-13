@@ -1,4 +1,16 @@
+//! # CYBERDECK: Service Intelligence Module
+//!
+//! Audits systemd services, categorizes them by function (Web, DB, Security, Infra),
+//! and provides operational status reporting.
+//!
+//! ## Implementation Notes
+//! - **Discovery**: Queries `systemctl` for active services.
+//! - **Categorization**: Heuristic-based grouping (Web, DB, Infra, Security).
+//! - **Reporting**: Generates a formatted markdown report of running processes.
+
+use std::fs;
 use std::process::Command;
+use crate::state::AppState;
 
 #[derive(Debug, PartialEq)]
 pub enum ServiceCategory {
@@ -15,49 +27,50 @@ pub struct ServiceItem {
     pub is_active: bool,
 }
 
-impl ServiceItem {
-    pub fn perform_action(&self, action: &str) -> Result<(), String> {
-        let status = Command::new("systemctl")
-            .arg(action)
-            .arg(&self.name)
-            .status()
-            .map_err(|e| e.to_string())?;
+/// Executes the service diagnostic suite.
+pub async fn execute(_state: &AppState, params: &str) -> Result<String, String> {
+    let dir = params;
+    let base_f = format!("{}/services.md", dir);
 
-        if status.success() {
-            Ok(())
-        } else {
-            Err(format!("Failed to {} service {}", action, self.name))
-        }
+    // 1. Discover and categorize
+    let services = discover_services();
+
+    // 2. Build report
+    let mut report = String::from("# ⚙️ CYBERDECK: ACTIVE SERVICES\n\n");
+    report.push_str("| Service Name | Category | Status |\n");
+    report.push_str("| :--- | :--- | :--- |\n");
+
+    for svc in services {
+        let cat = format!("{:?}", svc.category);
+        let status = if svc.is_active { "✅ Active" } else { "❌ Inactive" };
+        report.push_str(&format!("| `{}` | {} | {} |\n", svc.name, cat, status));
     }
+
+    // 3. Persist
+    fs::write(&base_f, report).map_err(|e| e.to_string())?;
+    Ok(base_f)
 }
 
-pub fn discover_services() -> Vec<ServiceItem> {
+fn discover_services() -> Vec<ServiceItem> {
     let output = Command::new("systemctl")
-        .args([
-            "list-units",
-            "--type=service",
-            "--state=running",
-            "--no-pager",
-            "--no-legend",
-        ])
-        .output()
-        .expect("Failed to execute systemctl. Is systemd installed?");
+    .args(["list-units", "--type=service", "--state=running", "--no-pager", "--no-legend"])
+    .output();
 
-    let stdout = String::from_utf8_lossy(&output.stdout);
-
-    stdout
-        .lines()
-        .map(|line| {
-            let parts: Vec<&str> = line.split_whitespace().collect();
-            let name = parts.first().unwrap_or(&"unknown").to_string();
-
-            ServiceItem {
-                category: classify_service(&name),
-                name,
-                is_active: true,
-            }
-        })
-        .collect()
+    match output {
+        Ok(out) => {
+            let stdout = String::from_utf8_lossy(&out.stdout);
+            stdout.lines().map(|line| {
+                let parts: Vec<&str> = line.split_whitespace().collect();
+                let name = parts.first().unwrap_or(&"unknown").to_string();
+                ServiceItem {
+                    category: classify_service(&name),
+                               name,
+                               is_active: true,
+                }
+            }).collect()
+        },
+        Err(_) => vec![], // Return empty if systemctl fails/not found
+    }
 }
 
 fn classify_service(name: &str) -> ServiceCategory {

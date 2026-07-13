@@ -1,137 +1,89 @@
-use std::fs::{self, OpenOptions};
-use std::io::Write;
+//! # CYBERDECK: Thermal Intelligence
+//!
+//! Monitors system thermal zones and provides a fallback to lm-sensors
+//! for detailed hardware temperature auditing.
+//!
+//! ## Implementation Notes
+//! - **Direct Kernel Access**: Reads raw thermal data from `/sys/class/thermal`.
+//! - **Predictive Analytics**: Tracks peak temperatures across all detected zones.
+//! - **Fallback**: Automatically defaults to `sensors` CLI if sysfs nodes are unavailable.
+
+use std::fs;
 use std::process::Command;
 use std::time::{SystemTime, UNIX_EPOCH};
+use crate::state::AppState;
 
-pub async fn execute_thermal_ai_module(dir: &str) -> std::io::Result<String> {
-    // 1. Initialize Subdirectory Tree Structures
-    let raw_dir = format!("{}/raw", dir);
-    let parsed_dir = format!("{}/parsed", dir);
-
-    fs::create_dir_all(&raw_dir)?;
-    fs::create_dir_all(&parsed_dir)?;
-
+/// Executes the thermal diagnostic suite.
+pub async fn execute(_state: &AppState, dir: &str) -> Result<String, String> {
     let base_f = format!("{}/thermal_ai.md", dir);
-    let raw_f = format!("{}/raw_temps.md", raw_dir);
-    let parsed_f = format!("{}/parsed_temps.md", parsed_dir);
+    let raw_f = format!("{}/raw/raw_temps.md", dir);
+    let parsed_f = format!("{}/parsed/parsed_temps.md", dir);
 
-    // Reusable file access closures
-    let write_to = |path: &str, content: &str| -> std::io::Result<()> {
-        let mut file = OpenOptions::new().create(true).append(true).open(path)?;
-        file.write_all(content.as_bytes())?;
-        Ok(())
-    };
+    // Ensure directories exist
+    fs::create_dir_all(format!("{}/raw", dir)).map_err(|e| e.to_string())?;
+    fs::create_dir_all(format!("{}/parsed", dir)).map_err(|e| e.to_string())?;
 
-    let overwrite_to = |path: &str, content: &str| -> std::io::Result<()> {
-        let mut file = OpenOptions::new().create(true).write(true).truncate(true).open(path)?;
-        file.write_all(content.as_bytes())?;
-        Ok(())
-    };
+    let timestamp = SystemTime::now()
+    .duration_since(UNIX_EPOCH)
+    .map_err(|e| e.to_string())?
+    .as_secs();
 
-    // Native implementations mimicking the `output_writer.fish` formats
-    let cyber_write_header = |path: &str, title: &str, emoji: &str| -> std::io::Result<()> {
-        let block = format!(
-            "<div style='background:#6a0dad;color:white;padding:6px;'>{} {}</div>\n\n",
-            emoji, title
-        );
-        overwrite_to(path, &block)
-    };
+    let mut report = format!("# 🌡️ CYBERDECK: THERMAL INTELLIGENCE\n\nTimestamp: {}\n\n", timestamp);
 
-    let cyber_write_section = |path: &str, title: &str, emoji: &str| -> std::io::Result<()> {
-        let section = format!("\n## {} {}\n", emoji, title);
-        write_to(path, &section)
-    };
-
-    let timestamp = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
-
-    // 2. Base Header Configuration
-    cyber_write_header(&base_f, "THERMAL INTELLIGENCE", "🌡️")?;
-    write_to(&base_f, &format!("Timestamp: {}\n\n", timestamp))?;
-
-    // Reset tracking counters
     let mut max_temp: f64 = 0.0;
     let mut sensor_count = 0;
-    overwrite_to(&raw_f, "")?;
+    let mut raw_data = String::new();
 
-    // 3. Safe Sensor Discovery Loops
-    if let Ok(thermal_entries) = fs::read_dir("/sys/class/thermal") {
+    // 1. Attempt Kernel Thermal Zone Discovery
+    if let Ok(entries) = fs::read_dir("/sys/class/thermal") {
         let mut zones = Vec::new();
-        for entry in thermal_entries.flatten() {
-            let filename = entry.file_name().into_string().unwrap_or_default();
-            if filename.starts_with("thermal_zone") {
+        for entry in entries.flatten() {
+            let name = entry.file_name().into_string().unwrap_or_default();
+            if name.starts_with("thermal_zone") {
                 zones.push(entry.path().join("temp"));
             }
         }
 
         if !zones.is_empty() {
-            cyber_write_section(&base_f, "RAW SENSOR DATA", "📡")?;
-
-            for (index, zone_path) in zones.iter().enumerate() {
-                if let Ok(raw_str) = fs::read_to_string(zone_path) {
-                    if let Ok(raw_val) = raw_str.trim().parse::<f64>() {
-                        let val = raw_val / 1000.0;
+            report.push_str("## 📡 RAW SENSOR DATA\n");
+            for (index, path) in zones.iter().enumerate() {
+                if let Ok(raw_str) = fs::read_to_string(path) {
+                    if let Ok(val) = raw_str.trim().parse::<f64>() {
+                        let temp_c = val / 1000.0;
                         sensor_count += 1;
+                        max_temp = max_temp.max(temp_c);
 
-                        write_to(&base_f, &format!("Zone {}: {:.2}°C\n", index + 1, val))?;
-                        write_to(&raw_f, &format!("{:.2}\n", val))?;
-
-                        if val > max_temp {
-                            max_temp = val;
-                        }
+                        let line = format!("Zone {}: {:.2}°C\n", index + 1, temp_c);
+                        report.push_str(&line);
+                        raw_data.push_str(&format!("{:.2}\n", temp_c));
                     }
                 }
             }
-        } else {
-            // Fallback: Check for hardware lm-sensors interface profiles
-            fallback_lm_sensors(&base_f, &raw_f, &cyber_write_section).await?;
         }
-    } else {
-        fallback_lm_sensors(&base_f, &raw_f, &cyber_write_section).await?;
     }
 
-    // 4. Parsed Summary Mapping Output
-    overwrite_to(&parsed_f, "# 🌡️ PARSED TEMPERATURE SUMMARY\n")?;
-    if sensor_count > 0 {
-        write_to(&parsed_f, &format!("- Peak temperature: {:.2}°C\n", max_temp))?;
-    } else {
-        write_to(&parsed_f, "- Peak temperature: unknown\n")?;
+    // 2. Fallback to lm-sensors if sysfs is empty
+    if sensor_count == 0 {
+        if let Ok(out) = Command::new("sensors").output() {
+            let stdout = String::from_utf8_lossy(&out.stdout).to_string();
+            report.push_str("## 🧪 LM-SENSORS OUTPUT\n```text\n");
+            report.push_str(&stdout);
+            report.push_str("```\n");
+            raw_data = stdout;
+        } else {
+            report.push_str("## ⚠️ Warning\nNo thermal sensors detected via sysfs or lm-sensors.\n");
+        }
     }
-    write_to(&parsed_f, &format!("- Sensors detected: {}\n", sensor_count))?;
 
-    // 5. Final Diagnostic Summary Injection
-    cyber_write_section(&base_f, "THERMAL SUMMARY", "🧠")?;
-    write_to(&base_f, &format!("- Peak temperature: {:.2}°C\n", max_temp))?;
-    write_to(&base_f, &format!("- Sensor count: {}\n", sensor_count))?;
+    // 3. Generate Summaries
+    report.push_str("\n## 🧠 THERMAL SUMMARY\n");
+    report.push_str(&format!("- Peak temperature: {:.2}°C\n", max_temp));
+    report.push_str(&format!("- Sensors detected: {}\n", sensor_count));
 
-    // 6. Cache Sync Hook
-    if let Ok(cache_dir) = std::env::var("CYBERDECK_CACHE_DIR") {
-        let _ = fs::create_dir_all(&cache_dir);
-        let _ = fs::copy(&base_f, format!("{}/thermal_ai.md", cache_dir));
-    }
+    // Write all artifacts
+    fs::write(&base_f, report).map_err(|e| e.to_string())?;
+    fs::write(&raw_f, raw_data).map_err(|e| e.to_string())?;
+    fs::write(&parsed_f, format!("Peak: {:.2}°C\nSensors: {}\n", max_temp, sensor_count)).map_err(|e| e.to_string())?;
 
     Ok(base_f)
-}
-
-async fn fallback_lm_sensors<F>(base_f: &str, raw_f: &str, section_writer: &F) -> std::io::Result<()>
-where
-F: Fn(&str, &str, &str) -> std::io::Result<()>,
-{
-    let mut file = OpenOptions::new().append(true).open(base_f)?;
-    writeln!(file, "\n## ⚠️ Thermal zones not found")?;
-
-    let output = Command::new("sensors").output();
-    match output {
-        Ok(out) if out.status.success() => {
-            let stdout = String::from_utf8_lossy(&out.stdout).to_string();
-            section_writer(base_f, "LM-SENSORS OUTPUT", "🧪")?;
-            file.write_all(stdout.as_bytes())?;
-
-            let mut r_file = OpenOptions::new().write(true).truncate(true).open(raw_f)?;
-            r_file.write_all(stdout.as_bytes())?;
-        }
-        _ => {
-            writeln!(file, "No thermal sensors available")?;
-        }
-    }
-    Ok(())
 }

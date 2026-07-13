@@ -1,3 +1,13 @@
+//! # CYBERDECK: Style API
+//!
+//! The DSL transpiler and CSS engine.
+//! Translates high-density shorthand (e.g., "clr", "m") into
+//! standard web-compliant CSS.
+//!
+//! ## Implementation Notes
+//! - **Parser**: Uses `pest` for recursive descent parsing.
+//! - **Translator**: Thread-safe global dictionary for shorthand expansion.
+
 use pest::Parser;
 use pest_derive::Parser;
 use std::collections::HashMap;
@@ -42,6 +52,29 @@ pub enum StylesheetElement {
     },
 }
 
+pub fn print_cheat_sheet() {
+    println!("=== 📖 CYBERDECK STYLE CHEAT SHEET ===");
+    println!("Shorthand | Standard CSS");
+    println!("----------|-------------");
+    // Dynamically iterate over your translator map here
+    for (shorthand, standard) in shorthand_map() {
+        println!("{: <9} | {}", shorthand, standard);
+    }
+}
+pub fn print_help() {
+    let map = translator::get_shorthand_map();
+    println!("\n=== 📖 CYBERDECK STYLE ENGINE: CHEAT SHEET ===");
+    println!("{:<15} | {:<20}", "SHORTHAND", "STANDARD CSS");
+    println!("{:-<15}-|-{:-<20}", "", "");
+
+    let mut keys: Vec<_> = map.keys().collect();
+    keys.sort();
+
+    for key in keys {
+        println!("{:<15} | {:<20}", key, map.get(key).unwrap());
+    }
+    println!("==============================================\n");
+}
 
 /// The main API entrypoint. Pass it raw text, get a clean Vector of parsed style blocks.
 pub fn parse_dsl(input: &str) -> Result<Vec<StylesheetElement>, String> {
@@ -54,7 +87,7 @@ pub fn parse_dsl(input: &str) -> Result<Vec<StylesheetElement>, String> {
         for command in stylesheet_pair.into_inner() {
             if command.as_rule() == Rule::command {
                 let inner_block = command.into_inner().next().unwrap();
-                
+
                 match inner_block.as_rule() {
                     Rule::style_block => {
                         let rule = parse_single_style_block(inner_block);
@@ -64,14 +97,14 @@ pub fn parse_dsl(input: &str) -> Result<Vec<StylesheetElement>, String> {
                         let mut inner_pairs = inner_block.into_inner();
                         let query = inner_pairs.next().unwrap().as_str().trim().to_string();
                         let mut rules = Vec::new();
-                        
+
                         // Gather all style blocks inside the media block
                         for style_pair in inner_pairs {
                             if style_pair.as_rule() == Rule::style_block {
                                 rules.push(parse_single_style_block(style_pair));
                             }
                         }
-                        
+
                         elements.push(StylesheetElement::Media { query, rules });
                     }
                     _ => unreachable!(),
@@ -100,5 +133,8 @@ fn parse_single_style_block(pair: pest::iterators::Pair<Rule>) -> StyleRuleBlock
         });
     }
 
-    StyleRuleBlock { selector, declarations }
+    StyleRuleBlock {
+        selector,
+        declarations,
+    }
 }
