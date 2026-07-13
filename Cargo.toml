@@ -1,0 +1,13 @@
+[package]
+name = "cyberdeck_core"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# Make sure to keep the existing version number when adding features
+axum = { version = "0.7", features = ["macros"] }
+tokio = { version = "1.0", features = ["full", "rt-multi-thread"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+chrono = "0.4"
+clap = { version = "4.0", features = ["derive"] }

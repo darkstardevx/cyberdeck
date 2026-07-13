@@ -1,0 +1,8 @@
+[book]
+authors = ["Darkstar"]
+language = "en"
+src = "src"
+title = "Cyberdeck System Manual"
+
+[output.html]
+git-repository-url = ""
