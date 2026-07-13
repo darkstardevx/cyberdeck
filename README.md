@@ -1,99 +1,101 @@
-# 🧊 CYBERDECK
+# 📟 CYBERDECK
+
+### *The Ultimate Systems Intelligence Framework*
 
 <img src="images/screenshot.png" alt="Cyberdeck Screenshot" width="800">
 
-### The Ultimate Cyberpunk Linux System Intelligence Framework
+> **Status:** *Under Active Development* | **Language:** Rust *(2021)*
+> 
+> **Current Version:** **0.1.0** *(SemVer)*
+> 
+> **🛡️ <mark>Engineering Note</mark>: [Stack Stability]**
 
-**CYBERDECK** is a modular Linux hardware and operating system intelligence framework written entirely in **Rust**. 
-
-It performs deep hardware inspection, driver analysis, storage intelligence, thermal monitoring, network discovery, BIOS auditing, power analysis, and produces organized Markdown reports designed for both humans and AI systems.
-
----
-
-## 📦 Features
-
-- **Modular architecture**
-- **AI-oriented reports**
-- **Cyberpunk themed interface**
-- **Individual module execution**
-- **Full system scan mode**
-- **Hierarchical report generation**
-- **Automatic cache generation**
-- **Markdown output**
-- **Safe timeout protection**
-- **Designed for Arch Linux** (Compatible with most modern Linux distributions)
+> **Why 2021?** Cyberdeck is anchored in a hardened, 2021-era toolchain.
+> In systems-critical coding, "latest" doesn't always mean "better." While many in the industry chase the volatility of the bleeding edge, I chose to make this project as rock-solid as possible while maintaining auditability and predictable performance. By utilizing this tried and true stack, we eliminate the unnecessary churn of rapid-release cycles, ensuring that your system intelligence engine remains rock-solid and reliable under any conditions.
 
 ---
 
-## 📜 Current Modules
+## ⚡ The Origin
 
-| Module | Description |
-| :--- | :--- |
-| **Hardware** | CPU, motherboard, PCI devices, USB devices |
-| **Disks** | Disk classification, partitions, SMART, NVMe, USB media |
-| **Storage AI** | Deep storage intelligence and filesystem analysis |
-| **Memory** | RAM configuration and utilization |
-| **Thermal AI** | Thermal zones, lm-sensors integration, temperature summaries |
-| **Power** | CPU governors, P-State, frequencies, power states |
-| **Network** | Interfaces, sockets, routing, DNS, driver information |
-| **Ethernet** | Realtek 2.5Gb analysis, driver diagnostics, interface statistics |
-| **Audio** | PipeWire/PulseAudio inspection |
-| **BIOS** | Firmware, DMI, UEFI information |
-| **Fan** | Cooling subsystem and fan detection |
+**Cyberdeck** wasn't born in a boardroom; it was forged on **Arch Linux**, fueled by the specific, high-performance needs of a **Hyprland** workflow. I was tired of gluing together disparate, inefficient shell scripts that consumed too many resources and lacked a unified data structure.
+
+I built this because I wanted something that felt as fast, responsive, and surgical as the environment I work in. What started as a personal utility to keep my system intelligence transparent has evolved into a full-scale framework for those who demand precision.
 
 ---
 
-## 📕 Output Structure
+## 🧭 The Philosophy
 
-Each module generates its own directory and Markdown report:
+This project is built for the love of the craft. My goal is to build a robust, memory-safe, and modular foundation for systems intelligence.
 
-```bash
-output/
-├── hardware/
-├── disks/
-├── network/
-├── full_scan/
-│   └── 2026-06-29_13-40-55/
-│       ├── FULL_REPORT.md
-│       ├── hardware/
-│       ├── disks/
-│       └── ...
-```
+* **Engineering over Marketing:** This is not a commercial product. There are no trackers, no telemetry, and no hidden agendas.
+* **Performance First:** Written in Rust to ensure system auditing doesn't incur the overhead common in interpreted languages.
+* **Modular Architecture:** Swap, add, or customize components without reinventing the wheel.
+* **AI-Friendly Output:** Designed to ingest system state and output clean, hierarchical Markdown, perfect for LLM-driven diagnostics.
 
 ---
 
-## 💾 Intelligence Engines
+## 🛠️ Core Capabilities
 
-### Disk Intelligence
-Classifies devices into `nvme/`, `ssd/`, `hdd/`, `usb/`, `media/`, `raw/`.
+| Feature                  | Description                                                   |
+|:------------------------ |:------------------------------------------------------------- |
+| **Hardware Topology**    | Deep inspection of CPU, Motherboard, and PCI/USB bus.         |
+| **Storage AI**           | Intelligent SMART analysis for NVMe, SSD, and HDD.            |
+| **Thermal Engine**       | High-granularity P-State, Governor, and thermal zone polling. |
+| **Network Intelligence** | Real-time diagnostics for interfaces, routing, and sockets.   |
+| **System State**         | Unified, structured exports for historical tracking.          |
 
-### Thermal Intelligence
-Automatically detects thermal zones, parses temperatures, calculates maximums, and falls back to `lm-sensors`.
+---
 
-### Power Intelligence
-Collects CPU topology, governors, scaling driver, AMD P-State, frequencies, power states, system load, and UPower information with timeout protection.
+## 🚧 Roadmap
 
-### Storage AI
-Analyzes block devices, filesystem usage, SMART status, encryption, NVMe devices, and filesystem hierarchy.
+* [x] Core framework & Registry architecture
+* [x] Basic Hardware & Thermal modules
+* [ ] Dashboard Mode (Live UI/GUI integration)
+* [ ] **AUR Packaging** – *Coming soon for the Arch community.*
+
+---
+
+## 🤝 Connect with the Lab
+
+I am looking for dedicated developers, systems engineers, and Linux enthusiasts who care about code quality. This isn't a help desk; it’s a laboratory for architectural discussion. 
+
+If you want to contribute, debate modular design, or discuss systems programming, join the development server:
+
+[**🔗 Join the Cyberdeck Discord Server**](https://discord.gg/gV9QbpADg2)
+
+---
+
+## 🏗️ Technical Specs
+
+* **Language:** Rust (`v1.8x`)
+* **Concurrency:** Async-first (Tokio)
+* **Architecture:** Decoupled Module Registry
+* **Output:** Structured Markdown/JSON
+
+*“The goal isn’t to build a tool that everyone uses; the goal is to build a tool that works exactly the way a developer expects it to.”*
 
 ---
 
 ## 🏗️ Installation & Deployment
 
 ### Dependencies
+
 Ensure you have the following system utilities installed:
 
 **Debian / Ubuntu / Mint / Pop!_OS**
+
 ```bash
 sudo apt update && sudo apt install lshw pciutils usbutils lm-sensors iproute2
 ```
 
 **Arch Linux (pacman, yay, or paru)**
+
 ```bash
 sudo pacman -Syu lshw pciutils usbutils lm_sensors iproute2
 ```
 
 ### Build & Run
+
 ```bash
 # Clone the repository
 git clone https://github.com/darkstardevx/cyberdeck.git
@@ -104,45 +106,19 @@ cargo run
 ```
 
 ### Execution
+
 To run every module and generate a `FULL_REPORT.md`:
+
 ```bash
 cyberdeck scan --full
 ```
 
 ---
 
-## 🧊 CYBERDECK Roadmap
-
-### Phase 1: Stabilization & Foundation
-- [x] Dependency Audit: Implemented pre-flight system checks.
-- [x] I/O Optimization: Refactored synchronous I/O to `tokio::task::spawn_blocking`.
-- [x] Error Handling Refactor: Standardizing error responses.
-- [x] Dashboard UI: Enhancing CSS/Grid layouts.
-
-### Phase 2: Extensibility
-*Goal: Enable users to write their own hardware probes.*
-- [ ] Lua 0.55 Runtime Initialization: Integrating engine within the Rust core.
-- [ ] FFI Bindings: Exposing safe Rust hardware hooks to Lua.
-- [ ] Script Sandboxing: Implementing restricted execution.
-- [ ] Plugin Hot-Reloading: Adding diagnostic scripts without restarting.
-
-### Phase 3: Network & Ecosystem
-*Goal: Build the platform beyond the local machine.*
-- [ ] Subgridsec Telemetry Sync: Pushing reports to subgridsec.org.
-- [ ] Remote Command Control: Authenticated, encrypted remote execution.
-- [ ] Plugin Marketplace: Community-contributed Lua scripts.
-
-### Phase 4: Hardening & Security
-- [ ] Audit Trail: Persistent encrypted logging for commands.
-- [ ] Cross-Distro Compatibility: Support for BSD and non-systemd.
-- [ ] Performance Benchmarking: Profiling the Lua execution layer.
-
----
-
 ## 🤝 Contributing
-Interested in Lua Module Development, UI/UX Design, or Documentation? Contact us:
 
-**Contact Matrix:** [cybercore.sh+cyberdeck@gmail.com](mailto:cybercore.sh+cyberdeck@gmail.com)
+Want to contribute by adding to our Lua Module Development, UI/UX Design? How about writing Rust modules, or Documentation?
+*Contact us*: [cybercore.sh+cyberdeck@gmail.com] (mailto:cybercore.sh+cyberdeck@gmail.com)
 
 ---
 
@@ -156,9 +132,11 @@ This project is an independent component of the **Cybercore Systems Framework** 
 <summary><b>🛡️ Defensive Guardrail Statement</b></summary>
 
 All software components, tools, prefixes, and configurations under the "Cyber" prefix within this ecosystem are developed completely independently as open-source utilities for specialized terminal environments. They maintain absolutely no affiliation, partnership, endorsement, sponsorship, or commercial connection with any external corporate cybersecurity providers, training collectives, or federal defense contractors. Prior art is formally registered and maintained immutably via active domain publication.
+
 </details>
 
 ---
 
 ## ⚖️ License
+
 MIT License
