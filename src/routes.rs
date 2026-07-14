@@ -6,7 +6,12 @@
 
 #![warn(missing_docs)]
 
-use axum::{extract::State, response::Html, Json};
+use axum::{
+    extract::State,
+    response::{Html, IntoResponse}, // Add IntoResponse here
+    Json,
+};
+
 use crate::types::{SharedCyberdeckState, CyberdeckCommand};
 use crate::dispatcher;
 
@@ -16,7 +21,7 @@ use crate::dispatcher;
 /// report counts, and the execution log, into the ui.html template.
 pub async fn get_index_page(State(state): State<SharedCyberdeckState>) -> Html<String> {
     let s = state.lock().await;
-    let template = include_str!("ui.html");
+    let template = include_str!("../static/ui.html");
     let logs = s.execution_log.iter().rev()
     .map(|log| format!("<li>{}</li>", log))
     .collect::<Vec<String>>().join("");
@@ -39,4 +44,34 @@ pub async fn get_cyberdeck_state(State(state): State<SharedCyberdeckState>) -> J
 pub async fn post_cyberdeck_command(State(state): State<SharedCyberdeckState>, Json(cmd): Json<CyberdeckCommand>) -> Json<String> {
     dispatcher::execute_cyberdeck_command(cmd, &state).await;
     Json("Instruction pipeline advanced successfully.".to_string())
+}
+
+use serde_json::{json, Value};
+use std::fs;
+
+pub async fn get_themes_list() -> impl IntoResponse {
+    let mut themes = json!({});
+    let base_path = "static/themes/sub-cyber";
+
+    // Scan the 6 sub-folders
+    if let Ok(folders) = fs::read_dir(base_path) {
+        for folder in folders.filter_map(|f| f.ok()) {
+            if folder.path().is_dir() {
+                let folder_name = folder.file_name().into_string().unwrap_or_default();
+                let mut theme_list = Vec::new();
+
+                // Scan for .json files in these folders
+                if let Ok(files) = fs::read_dir(folder.path()) {
+                    for file in files.filter_map(|f| f.ok()) {
+                        if file.path().extension().and_then(|s| s.to_str()) == Some("json") {
+                            let theme_name = file.path().file_stem().unwrap().to_str().unwrap().to_string();
+                            theme_list.push(theme_name);
+                        }
+                    }
+                }
+                themes[folder_name] = json!(theme_list);
+            }
+        }
+    }
+    Json(themes)
 }

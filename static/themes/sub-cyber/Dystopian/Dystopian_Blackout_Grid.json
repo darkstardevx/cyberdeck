@@ -1,0 +1,14 @@
+{
+  "name": "Dystopian_Blackout_Grid",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "dystopian",
+  "background": "#050505",
+  "foreground": "#7a7a7a",
+  "cursor": "#333333",
+  "colors": [
+    "#020202", "#0f0f0f", "#1f1f1f", "#303030",
+    "#454545", "#5c5c5c", "#292929", "#191919",
+    "#333333", "#4d4d4d", "#666666", "#1c1c1c",
+    "#808080", "#b3b3b3", "#080808", "#ffffff"
+  ]
+}

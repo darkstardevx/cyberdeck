@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CYBERDECK Core</title>
+    <link rel="stylesheet" href="ui.css">
+    <script>
+        // --- 1. Theme Management ---
+        async function loadThemeList() {
+            const selector = document.getElementById('theme-selector');
+            try {
+                const response = await fetch('/api/themes');
+                if (!response.ok) throw new Error('Failed to fetch themes');
+
+                const themeData = await response.json();
+
+                // Add the "Reset" option first
+                selector.innerHTML = '<option value="reset">-- DEFAULT (CYBERDECK) --</option>';
+
+                for (const [folder, files] of Object.entries(themeData)) {
+                    const group = document.createElement('optgroup');
+                    group.label = folder;
+
+                    files.forEach(fileName => {
+                        const option = document.createElement('option');
+                        option.value = `${folder}/${fileName}`;
+                        option.textContent = fileName;
+                        group.appendChild(option);
+                    });
+                    selector.appendChild(group);
+                }
+            } catch (err) {
+                console.error("Error loading theme list:", err);
+            }
+        }
+
+        function resetTheme() {
+            localStorage.removeItem('selectedTheme');
+            window.location.reload(); // Hard reset to default CSS
+        }
+
+        async function applySelectedTheme() {
+            const selector = document.getElementById('theme-selector');
+            const value = selector.value;
+
+            if (!value) return;
+            if (value === "reset") {
+                resetTheme();
+                return;
+            }
+
+            const [folder, theme] = value.split('/');
+            const path = `/themes/sub-cyber/${folder}/${theme}.json`;
+
+            try {
+                const response = await fetch(path);
+                const data = await response.json();
+
+                // Define the translation map
+                const themeMap = {
+                    "background": "bg-main",
+                    "foreground": "text-primary",
+                };
+
+                // Apply mapped values
+                for (const [jsonKey, cssVarName] of Object.entries(themeMap)) {
+                    if (data[jsonKey]) {
+                        document.documentElement.style.setProperty(`--${cssVarName}`, data[jsonKey]);
+                    }
+                }
+
+                // Map specific colors from the 'colors' array
+                if (Array.isArray(data.colors)) {
+                    const colors = data.colors;
+                    if (colors[9]) document.documentElement.style.setProperty('--accent-cyan', colors[9]);
+                    if (colors[11]) document.documentElement.style.setProperty('--accent-purple', colors[11]);
+                    if (colors[10]) document.documentElement.style.setProperty('--accent-amber', colors[10]);
+                }
+
+                localStorage.setItem('selectedTheme', value);
+            } catch (err) {
+                console.error("Failed to apply theme:", err);
+            }
+        }
+
+        // --- 2. Command Dispatcher ---
+        async function sendCommand(command, btn) {
+            const originalText = btn.innerText;
+            btn.innerText = "⚡ EXECUTING...";
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('/api/cyberdeck/command', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(command)
+                });
+
+                if (res.ok) {
+                    btn.style.background = "var(--accent-cyan)";
+                    btn.innerText = "✅ COMPLETE";
+                    setTimeout(() => window.location.reload(), 800);
+                } else {
+                    throw new Error(await res.text());
+                }
+            } catch (err) {
+                alert('System Error: ' + err.message);
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        // --- 3. Page Initialization ---
+        window.addEventListener('DOMContentLoaded', async () => {
+            await loadThemeList();
+
+            // Restore saved theme
+            const saved = localStorage.getItem('selectedTheme');
+            if (saved) {
+                const selector = document.getElementById('theme-selector');
+                selector.value = saved;
+                applySelectedTheme();
+            }
+        });
+    </script>
+</head>
+<body>
+    <h2>⚡ CYBERDECK ⚡</h2>
+
+    <select id="theme-selector" onchange="applySelectedTheme()">
+        <option value="">Loading themes...</option>
+    </select>
+
+    <div class="panel">
+        <strong>DISPLAY STATUS:</strong> <span class="status-val">{{DISPLAY_STATUS}}</span> |
+        <strong>STEALTH MODE:</strong> <span class="status-val">{{STEALTH_MODE}}</span> |
+        <strong>REPORTS DETECTED:</strong> <span class="status-val">{{REPORTS_COUNT}}</span>
+    </div>
+
+    <h3>🔮 DISPATCH INFRASTRUCTURE SCANS</h3>
+    <div class="grid" id="button-container"></div>
+
+    <script>
+        const modules = [
+            { label: "🖥️ PROBE HARDWARE CORE", cmd: "RunHardwareModule" },
+            { label: "🔌 MEASURE POWER DRAW", cmd: "RunPowerModule" },
+            { label: "🧠 MAP MEMORY BANKS", cmd: "RunMemoryModule" },
+            { label: "🤖 EXECUTE STORAGE AI", cmd: "RunStorageAiModule" },
+            { label: "🌡️ MONITOR THERMAL ARRAY", cmd: "RunThermalModule" },
+            { label: "🌐 TRACE NETWORK NODES", cmd: "RunNetworkModule" },
+            { label: "🌬️ SYNC FAN VELOCITY", cmd: "RunFanModule" },
+            { label: "🎧 DIAGNOSE AUDIO SINKS", cmd: "RunAudioModule" },
+            { label: "📟 INTERROGATE BIOS LAYERS", cmd: "RunBiosModule" },
+            { label: "💽 ANALYZE DISK TOPOLOGY", cmd: "RunDisksModule" },
+            { label: "🔋 AUDIT BATTERY HEALTH", cmd: "RunBatteryModule" },
+            { label: "⚙️ INSPECT SYSTEM DAEMONS", cmd: "RunServicesModule" },
+            { label: "🧩 QUERY MAINBOARD BUS", cmd: "RunMotherboardModule" }
+        ];
+
+        const container = document.getElementById('button-container');
+        modules.forEach(mod => {
+            const btn = document.createElement('button');
+            btn.textContent = mod.label;
+            btn.onclick = () => sendCommand({ [mod.cmd]: './diagnostics' }, btn);
+            container.appendChild(btn);
+        });
+    </script>
+
+    <h3>📟 LIVE SYSTEM FEED</h3>
+    <ul>{{SYSTEM_LOGS}}</ul>
+</body>
+</html>

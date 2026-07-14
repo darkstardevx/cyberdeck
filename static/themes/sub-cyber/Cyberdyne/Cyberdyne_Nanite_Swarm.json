@@ -1,0 +1,14 @@
+{
+  "name": "Cyberdyne_Nanite_Swarm",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "bio-mechanical",
+  "background": "#07040a",
+  "foreground": "#b500ff",
+  "cursor": "#00ffff",
+  "colors": [
+    "#030205", "#130b1c", "#241535", "#382052",
+    "#4f2e73", "#6a3e9c", "#2f1b46", "#1c102a",
+    "#b500ff", "#00ffff", "#800080", "#00a8a8",
+    "#d655ff", "#55ffff", "#100a17", "#ffffff"
+  ]
+}

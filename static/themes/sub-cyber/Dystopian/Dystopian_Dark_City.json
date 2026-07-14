@@ -1,0 +1,14 @@
+{
+  "name": "Dystopian Dark City",
+  "author": "Darkstar [darkstardevx@gmail.com] ",
+  "category": "neon",
+  "background": "#00090a",
+  "foreground": "#d419b0",
+  "cursor": "",
+  "colors": [
+    "#000000", "#90d509", "#222222", "#333333",
+    "#444444", "#555555", "#666666", "#847878",
+    "#42db0e", "#1b03f5", "#272727", "#393939",
+    "#484848", "#595959", "#0c87e1", "#8a038c"
+  ]
+}

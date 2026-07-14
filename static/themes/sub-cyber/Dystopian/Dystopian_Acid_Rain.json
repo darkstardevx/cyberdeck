@@ -1,0 +1,14 @@
+{
+  "name": "Dystopian_Acid_Rain",
+  "author": "Darkstar [darkstardevx4@gmail.com]",
+  "category": "dystopian",
+  "background": "#060a0a",
+  "foreground": "#7da3a1",
+  "cursor": "#00ffaa",
+  "colors": [
+    "#030505", "#0e1717", "#1b2b2b", "#2b4544",
+    "#3d6160", "#528280", "#233837", "#152121",
+    "#00ffaa", "#517371", "#688f8d", "#3b5453",
+    "#55ffcc", "#a4c4c2", "#0a0f0f", "#ffffff"
+  ]
+}

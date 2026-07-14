@@ -1,0 +1,14 @@
+{
+  "name": "Neosynth_Vector_Shadows",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "neon",
+  "background": "#03080c",
+  "foreground": "#00ffcc",
+  "cursor": "#bd00ff",
+  "colors": [
+    "#010406", "#06131c", "#0d2434", "#16384e",
+    "#204d6b", "#2c678c", "#112e42", "#081b28",
+    "#00ffcc", "#bd00ff", "#ff0055", "#0088ff",
+    "#33ff00", "#d600ff", "#00f0ff", "#ffffff"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Neosynth_Cyber_Asphalt",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "neon",
+  "background": "#0a0b10",
+  "foreground": "#00f0ff",
+  "cursor": "#ff0055",
+  "colors": [
+    "#050609", "#11131a", "#1d202c", "#2a2f3f",
+    "#3a4054", "#4b536a", "#222634", "#151821",
+    "#ff0055", "#00f0ff", "#ffff00", "#a125ff",
+    "#ff5e00", "#00ffaa", "#7015ff", "#ffffff"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Cyberdyne_Mecha_Malfunction",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "bio-mechanical",
+  "background": "#0a0905",
+  "foreground": "#ffcc00",
+  "cursor": "#ff3300",
+  "colors": [
+    "#050402", "#17140b", "#2c2615", "#443b20",
+    "#5f522d", "#7d6c3b", "#38311b", "#211d10",
+    "#ffcc00", "#ff3300", "#b8860b", "#ff5500",
+    "#ffee55", "#ff6622", "#14130d", "#ffffff"
+  ]
+}

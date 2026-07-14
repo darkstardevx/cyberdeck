@@ -1,0 +1,14 @@
+{
+  "name": "Cyberdyne_Xenomorph_Acid",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "bio-mechanical",
+  "background": "#040806",
+  "foreground": "#39ff14",
+  "cursor": "#ccff00",
+  "colors": [
+    "#020403", "#0b140f", "#17291f", "#244031",
+    "#345c46", "#467d5f", "#1b3327", "#101f18",
+    "#39ff14", "#ccff00", "#107840", "#0a4727",
+    "#66ff66", "#adff2f", "#121314", "#ffffff"
+  ]
+}

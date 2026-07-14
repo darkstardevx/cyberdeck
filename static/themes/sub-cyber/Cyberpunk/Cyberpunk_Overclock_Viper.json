@@ -1,0 +1,14 @@
+{
+  "name": "Cyberpunk_Overclock_Viper",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "hacker",
+  "background": "#040905",
+  "foreground": "#a6ff00",
+  "cursor": "#ff3300",
+  "colors": [
+    "#020402", "#0b190f", "#172d1c", "#25462c",
+    "#35623e", "#478253", "#1b3722", "#102115",
+    "#a6ff00", "#ff3300", "#77cc00", "#cc2200",
+    "#ccff66", "#ff7755", "#0a130c", "#ffffff"
+  ]
+}

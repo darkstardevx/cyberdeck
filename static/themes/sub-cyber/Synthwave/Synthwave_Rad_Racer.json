@@ -1,0 +1,14 @@
+{
+  "name": "Synthwave_Rad_Racer",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "neon",
+  "background": "#0d0409",
+  "foreground": "#ff2a6d",
+  "cursor": "#ffea00",
+  "colors": [
+    "#060204", "#1a0812", "#331024", "#521a3b",
+    "#752554", "#9c3170", "#42152f", "#270c1c",
+    "#ff2a6d", "#ffea00", "#05d9e8", "#01012b",
+    "#ff5e00", "#e1ff00", "#b500ff", "#ffffff"
+  ]
+}

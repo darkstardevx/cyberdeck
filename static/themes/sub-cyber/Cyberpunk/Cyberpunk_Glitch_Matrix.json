@@ -1,0 +1,14 @@
+{
+  "name": "Cyberpunk_Glitch_Matrix",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "hacker",
+  "background": "#050606",
+  "foreground": "#85ff00",
+  "cursor": "#ffea00",
+  "colors": [
+    "#020303", "#0f1414", "#1f2929", "#324242",
+    "#485e5e", "#5f7d7d", "#293636", "#192121",
+    "#85ff00", "#ffea00", "#55aa00", "#ccff00",
+    "#b3ff55", "#ffff99", "#0b0d0d", "#ffffff"
+  ]
+}

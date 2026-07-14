@@ -1,8 +1,5 @@
 //! # CYBERDECK Core
-//!
 //! The entry point and primary controller for the CYBERDECK system.
-//! This module acts as the "Kernel," managing the asynchronous runtime,
-//! system state synchronization, and the HTTP API routing interface.
 
 #![warn(missing_docs)]
 
@@ -11,15 +8,15 @@ mod parser;
 mod modules;
 mod dispatcher;
 mod routes;
-use crate::types::CyberdeckState;
 
+use crate::types::CyberdeckState;
 use axum::{routing::{get, post}, Router};
 use std::sync::Arc;
 use tokio::sync::Mutex;
 use crate::parser::parse_cyberdeck_script;
+use tower_http::services::ServeDir; // 1. Added import
 
 /// Primary entry point.
-/// Initializes the multi-threaded tokio runtime and blocks on the async initialization.
 #[tokio::main]
 async fn main() {
     let state = Arc::new(Mutex::new(CyberdeckState {
@@ -38,9 +35,12 @@ async fn main() {
     }
 
     let app = Router::new()
+    .route("/api/themes", get(routes::get_themes_list))
     .route("/", get(routes::get_index_page))
     .route("/api/cyberdeck/state", get(routes::get_cyberdeck_state))
     .route("/api/cyberdeck/command", post(routes::post_cyberdeck_command))
+    // 2. Fallback handles requests not matched by your routes (like ui.css)
+    .fallback_service(ServeDir::new("static"))
     .with_state(state);
 
     let port = std::env::var("CYBERDECK_PORT").unwrap_or_else(|_| "8080".to_string());

@@ -1,0 +1,14 @@
+{
+  "name": "Neosynth_Arcade_Eclipse",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "neon",
+  "background": "#070510",
+  "foreground": "#ffcc00",
+  "cursor": "#ff00ff",
+  "colors": [
+    "#030208", "#120d24", "#231942", "#372764",
+    "#4d3789", "#674ab3", "#2e2059", "#1b1336",
+    "#ffcc00", "#ff00ff", "#00ffcc", "#ff3300",
+    "#ffe600", "#ff00aa", "#6200ea", "#ffffff"
+  ]
+}

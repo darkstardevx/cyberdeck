@@ -1,0 +1,14 @@
+{
+  "name": "Neosynth_Miami_Midnight",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "neon",
+  "background": "#0b0514",
+  "foreground": "#ea00d9",
+  "cursor": "#0abfbc",
+  "colors": [
+    "#05020a", "#150a24", "#26123e", "#3a1b5c",
+    "#50267c", "#6a33a3", "#331654", "#1f0c33",
+    "#ea00d9", "#0abfbc", "#0078ff", "#fe019a",
+    "#f35588", "#05dfd7", "#711c91", "#ffffff"
+  ]
+}

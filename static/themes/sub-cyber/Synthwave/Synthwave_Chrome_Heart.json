@@ -1,0 +1,14 @@
+{
+  "name": "Synthwave_Chrome_Heart",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "neon",
+  "background": "#080407",
+  "foreground": "#ff0055",
+  "cursor": "#ffcc00",
+  "colors": [
+    "#040203", "#140a11", "#261320", "#3d1f34",
+    "#572c4a", "#743b63", "#33162a", "#1f0d19",
+    "#ff0055", "#ffcc00", "#ff00aa", "#00ff66",
+    "#ff5588", "#ffee55", "#3a0022", "#ffffff"
+  ]
+}

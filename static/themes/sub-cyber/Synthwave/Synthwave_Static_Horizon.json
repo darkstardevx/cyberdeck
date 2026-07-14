@@ -1,0 +1,14 @@
+{
+  "name": "Synthwave_Static_Horizon",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "neon",
+  "background": "#08080c",
+  "foreground": "#ea00d9",
+  "cursor": "#00f0ff",
+  "colors": [
+    "#040406", "#111119", "#1e1e2d", "#2d2d42",
+    "#3e3e5b", "#515177", "#242433", "#15151f",
+    "#ea00d9", "#00f0ff", "#ffdd00", "#ff3300",
+    "#f35588", "#55ffff", "#0f0f17", "#ffffff"
+  ]
+}

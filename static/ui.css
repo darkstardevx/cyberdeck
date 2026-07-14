@@ -1,0 +1,89 @@
+:root {
+    --bg-main: #000000;
+    --bg-card: #050507;
+    --border-color: #16181f;
+    --text-primary: #f1f5f9;
+    --text-muted: #525865;
+    --accent-cyan: #06b6d4;
+    --accent-purple: #7c3aed;
+    --accent-amber: #f59e0b;
+}
+
+body {
+    font-family: 'Courier New', monospace;
+    background: var(--bg-main);
+    color: var(--text-primary);
+    padding: 20px;
+    min-height: 100vh;
+    /* CRT Scanline Effect */
+    background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%),
+    linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+    background-size: 100% 4px, 3px 100%;
+}
+
+/* Custom Cyberpunk Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-card); }
+::-webkit-scrollbar-thumb {
+    background: var(--accent-purple);
+    border: 1px solid var(--accent-cyan);
+    box-shadow: 0 0 10px var(--accent-purple);
+}
+
+h2 {
+    color: var(--accent-cyan);
+    text-shadow: 0 0 10px rgba(6, 182, 212, 0.35), 0 0 20px rgba(124, 58, 237, 0.2);
+    border-bottom: 2px solid var(--accent-purple);
+    padding-bottom: 10px;
+    letter-spacing: 2px;
+}
+
+h3 {
+    color: var(--accent-purple);
+    text-shadow: 0 0 5px rgba(124, 58, 237, 0.25);
+    margin-top: 30px;
+}
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 15px; margin-top: 20px; }
+
+button {
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    padding: 14px;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: monospace;
+    text-transform: uppercase;
+    transition: all 0.2s ease-in-out;
+}
+
+button:hover {
+    background: var(--accent-cyan);
+    color: var(--bg-main);
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 15px var(--accent-cyan);
+    transform: translateY(-2px);
+}
+
+.panel {
+    border: 1px solid var(--border-color);
+    padding: 15px;
+    background: var(--bg-card);
+    margin-top: 20px;
+    box-shadow: 0 0 10px rgba(124, 58, 237, 0.1);
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    max-height: 300px;
+    overflow-y: auto;
+    background: #030305;
+    border: 1px solid var(--border-color);
+    padding: 10px;
+}
+
+li { padding: 6px 0; border-bottom: 1px solid var(--border-color); font-size: 13px; color: var(--text-primary); }
+
+.status-val { color: var(--accent-amber); font-weight: bold; }

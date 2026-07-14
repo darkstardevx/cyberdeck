@@ -1,0 +1,14 @@
+{
+  "name": "Synthwave_Analog_Dream",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "neon",
+  "background": "#07050d",
+  "foreground": "#e0115f",
+  "cursor": "#0abfbc",
+  "colors": [
+    "#030206", "#120d24", "#231942", "#372769",
+    "#4f3994", "#694bc4", "#2c2057", "#1b1336",
+    "#e0115f", "#0abfbc", "#ffb703", "#7015ff",
+    "#ff5588", "#05dfd7", "#4a154b", "#ffffff"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Synthwave_Grid_Runner",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "neon",
+  "background": "#05040a",
+  "foreground": "#bc13fe",
+  "cursor": "#00ffaa",
+  "colors": [
+    "#020205", "#0f0c1f", "#1f183e", "#322764",
+    "#48388f", "#614cbd", "#2a2154", "#191433",
+    "#bc13fe", "#00ffaa", "#ff007f", "#39ff14",
+    "#9d4edd", "#00f0ff", "#ff00aa", "#ffffff"
+  ]
+}

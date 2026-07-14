@@ -1,0 +1,14 @@
+{
+  "name": "Cyberpunk_Daemon_Spawn",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "hacker",
+  "background": "#090408",
+  "foreground": "#fe019a",
+  "cursor": "#9d00ff",
+  "colors": [
+    "#040204", "#190b16", "#2f152a", "#4a2142",
+    "#672e5b", "#873d77", "#3a1a33", "#23101f",
+    "#fe019a", "#9d00ff", "#aa0066", "#6600cc",
+    "#ff66cc", "#d677ff", "#140a12", "#ffffff"
+  ]
+}

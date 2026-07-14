@@ -1,0 +1,14 @@
+{
+  "name": "Cyberdyne_T800_Chassis",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "bio-mechanical",
+  "background": "#0b0c10",
+  "foreground": "#c5cbd3",
+  "cursor": "#ff0000",
+  "colors": [
+    "#050608", "#11141a", "#1f242e", "#2f3645",
+    "#414b5f", "#56637d", "#252b37", "#161a21",
+    "#ff0000", "#71797e", "#b4b8ab", "#4a4e4d",
+    "#ff3333", "#e5e5e5", "#1a1a1a", "#ffffff"
+  ]
+}

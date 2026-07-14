@@ -1,0 +1,14 @@
+{
+  "name": "Dystopian_Wasteland_Sand",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "dystopian",
+  "background": "#0d0b08",
+  "foreground": "#bfa88a",
+  "cursor": "#c7923c",
+  "colors": [
+    "#060504", "#1a1610", "#30291f", "#4a3f30",
+    "#665843", "#877459", "#3d3527", "#242018",
+    "#c7923c", "#948065", "#786751", "#524536",
+    "#ffcd73", "#ded1be", "#120f0b", "#ffffff"
+  ]
+}

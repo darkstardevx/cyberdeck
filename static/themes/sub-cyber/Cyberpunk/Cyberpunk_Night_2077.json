@@ -1,0 +1,14 @@
+{
+  "name": "Cyberpunk 2077",
+  "author": "Darkstar [darkstardevx@gmail.com] ",
+  "category": "neon",
+  "background": "#080c08",
+  "foreground": "#a1b2a1",
+  "cursor": "#bf1515",
+  "colors": [
+    "#000000", "#bf1515", "#8da35d", "#d4a017", 
+    "#41729f", "#8c538c", "#3f8880", "#a1b2a1",
+    "#333333", "#ff2a2a", "#b5cf82", "#ffd700", 
+    "#5c9cd6", "#b873b8", "#5fc3b6", "#ffffff"
+  ]
+}

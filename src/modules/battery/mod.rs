@@ -1,20 +1,11 @@
 //! # CYBERDECK: Battery & Power Diagnostics Module
-//!
-//! Provides comprehensive power telemetry, including multi-battery status,
-//! AC adapter detection, and energy flow metrics (Voltage, Power draw).
-//!
-//! ## Implementation Notes
-//! - **Target**: Linux sysfs (`/sys/class/power_supply/`).
-//! - **Compatibility**: Supports multi-battery setups (BAT0, BAT1), AC adapters (AC, ADP1).
-//! - **Metrics**: Reads real-time capacity, energy, voltage, and power usage.
 
-use std::fs;
+use std::fs::{self, File};
+use std::io::Write; // Needed for the writeln! macro
 use crate::types::CyberdeckState;
+use crate::modules::utils::write_header; // Assuming your helper is here
 
 /// Executes the battery diagnostic sweep.
-///
-/// Scans the system's power management tree to identify and report on
-/// all detected power supply controllers.
 pub async fn execute(_state: &CyberdeckState, params: &str) -> Result<String, String> {
     let dir = params;
     let bat_dir = format!("{}/battery", dir);
@@ -22,7 +13,15 @@ pub async fn execute(_state: &CyberdeckState, params: &str) -> Result<String, St
     fs::create_dir_all(&bat_dir).map_err(|e| e.to_string())?;
     let report_path = format!("{}/battery.md", bat_dir);
 
-    let mut report = String::from("# 🔋 CYBERDECK: SYSTEM POWER & BATTERY TELEMETRY\n\n");
+    // Create the file handle directly
+    let mut file = File::create(&report_path).map_err(|e| e.to_string())?;
+
+    // 1. Inject the Cyberdeck Header
+    write_header(&mut file, "ACTIVE").map_err(|e| e.to_string())?;
+
+    // 2. Write the Title
+    writeln!(file, "# 🔋 CYBERDECK: SYSTEM POWER & BATTERY TELEMETRY\n").map_err(|e| e.to_string())?;
+
     let power_supply_root = "/sys/class/power_supply";
 
     if let Ok(entries) = fs::read_dir(power_supply_root) {
@@ -32,13 +31,11 @@ pub async fn execute(_state: &CyberdeckState, params: &str) -> Result<String, St
             let path = entry.path();
             let name = entry.file_name().into_string().unwrap_or_default();
 
-            // Skip non-directory entries
             if !path.is_dir() { continue; }
             found_any = true;
 
-            report.push_str(&format!("## ⚡ Controller: `{}`\n", name));
+            writeln!(file, "## ⚡ Controller: `{}`", name).map_err(|e| e.to_string())?;
 
-            // Attributes to attempt to read
             let attributes = [
                 ("Status", "status"),
                 ("Capacity", "capacity"),
@@ -51,22 +48,21 @@ pub async fn execute(_state: &CyberdeckState, params: &str) -> Result<String, St
                 ("Power Draw (µW)", "power_now"),
             ];
 
-            for (label, file) in attributes {
-                let attr_path = path.join(file);
+            for (label, filename) in attributes {
+                let attr_path = path.join(filename);
                 if let Ok(content) = fs::read_to_string(attr_path) {
-                    report.push_str(&format!("- **{}:** {}\n", label, content.trim()));
+                    writeln!(file, "- **{}:** {}", label, content.trim()).map_err(|e| e.to_string())?;
                 }
             }
-            report.push('\n');
+            writeln!(file, "").map_err(|e| e.to_string())?;
         }
 
         if !found_any {
-            report.push_str("⚠️ No power controllers found in `/sys/class/power_supply/`.");
+            writeln!(file, "⚠️ No power controllers found in `/sys/class/power_supply/`.").map_err(|e| e.to_string())?;
         }
     } else {
-        report.push_str("❌ Access Denied: Cannot read `/sys/class/power_supply/`.");
+        writeln!(file, "❌ Access Denied: Cannot read `/sys/class/power_supply/`.").map_err(|e| e.to_string())?;
     }
 
-    fs::write(&report_path, report).map_err(|e| e.to_string())?;
     Ok(report_path)
 }

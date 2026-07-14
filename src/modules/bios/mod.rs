@@ -73,7 +73,7 @@ pub async fn execute(_state: &CyberdeckState, params: &str) -> Result<String, St
     .as_secs();
 
     // 2. Base Header Configuration
-    overwrite_to(&base_f, "<div style='background:#6a0dad;color:white;padding:6px;'>⚙️ CYBERDECK: BIOS & SYSTEM INTELLIGENCE</div>\n\n")?;
+    write_to(&base_f, &format!("⚙️ CYBERDECK: BIOS & SYSTEM INTELLIGENCE\nTimestamp: {}\n\n## 🧠 SYSTEM OVERVIEW\n", timestamp))?;
     write_to(&base_f, &format!("Timestamp: {}\n\n## 🧠 SYSTEM OVERVIEW\n", timestamp))?;
 
     let uname_all = run_cmd("uname", &["-a"]);
