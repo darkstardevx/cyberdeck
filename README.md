@@ -6,7 +6,7 @@
 
 > **Status:** *Under Active Development* | **Language:** Rust *(2021)*
 > 
-> **Current Version:** **0.1.0** *(SemVer)*
+> **Current Version:** **v0.1.0-alpha.5** *(SemVer)*
 > 
 > **🛡️ <mark>Engineering Note</mark>: [Stack Stability]**
 
