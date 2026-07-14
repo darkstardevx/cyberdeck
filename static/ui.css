@@ -1,3 +1,6 @@
+/* ==========================================================================
+ *  1. VARIABLES & GLOBALS
+ *  ========================================================================== */
 :root {
     --bg-main: #000000;
     --bg-card: #050507;
@@ -7,6 +10,7 @@
     --accent-cyan: #06b6d4;
     --accent-purple: #7c3aed;
     --accent-amber: #f59e0b;
+    --danger: #ff3e3e;
 }
 
 body {
@@ -15,13 +19,13 @@ body {
     color: var(--text-primary);
     padding: 20px;
     min-height: 100vh;
-    /* CRT Scanline Effect */
-    background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%),
+    background-image:
+    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%),
     linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
     background-size: 100% 4px, 3px 100%;
 }
 
-/* Custom Cyberpunk Scrollbar */
+/* Scrollbar */
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: var(--bg-card); }
 ::-webkit-scrollbar-thumb {
@@ -30,28 +34,23 @@ body {
     box-shadow: 0 0 10px var(--accent-purple);
 }
 
+/* ==========================================================================
+ *  2. TYPOGRAPHY
+ *  ========================================================================== */
 h2 {
     color: var(--accent-cyan);
-    text-shadow: 0 0 10px rgba(6, 182, 212, 0.35), 0 0 20px rgba(124, 58, 237, 0.2);
+    text-shadow: 0 0 10px rgba(6, 182, 212, 0.35);
     border-bottom: 2px solid var(--accent-purple);
     padding-bottom: 10px;
     letter-spacing: 2px;
 }
 
-h3 {
-    color: var(--accent-purple);
-    text-shadow: 0 0 5px rgba(124, 58, 237, 0.25);
-    margin-top: 30px;
-}
+h3 { color: var(--accent-purple); margin-top: 30px; }
+h4 { color: var(--accent-cyan); margin-top: 20px; }
 
-h4 {
-    color: var(--accent-cyan);
-    text-shadow: 0 0 5px rgba(6, 182, 212, 0.35);
-    margin-top: 20px;
-}
-
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 15px; margin-top: 20px; }
-
+/* ==========================================================================
+ *  3. BUTTONS & CONTROLS
+ *  ========================================================================== */
 button {
     background: var(--bg-card);
     color: var(--text-primary);
@@ -69,9 +68,20 @@ button:hover {
     color: var(--bg-main);
     border-color: var(--accent-cyan);
     box-shadow: 0 0 15px var(--accent-cyan);
-    transform: translateY(-2px);
 }
 
+/* Nav/Action specific buttons */
+.nav-btn {
+    background: #222;
+    color: var(--danger);
+    border: 1px solid var(--danger);
+    width: 100%;
+    padding: 10px;
+}
+
+/* ==========================================================================
+ *  4. LAYOUT COMPONENTS (Panels & Lists)
+ *  ========================================================================== */
 .panel {
     border: 1px solid var(--border-color);
     padding: 15px;
@@ -80,54 +90,95 @@ button:hover {
     box-shadow: 0 0 10px rgba(124, 58, 237, 0.1);
 }
 
-ul {
-    list-style-type: none;
-    padding: 0;
-    max-height: 300px;
-    overflow-y: auto;
-    background: #030305;
-    border: 1px solid var(--border-color);
-    padding: 10px;
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 15px; }
+
+/* File Viewer List Row */
+.file-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 10px;
+    border-bottom: 1px solid #333;
+    font-size: 14px;
 }
 
-li { padding: 6px 0; border-bottom: 1px solid var(--border-color); font-size: 13px; color: var(--text-primary); }
+.file-row button {
+    padding: 4px 10px;
+    font-size: 12px;
+    margin-left: 10px;
+}
 
-.status-val { color: var(--accent-amber); font-weight: bold; }
-
+/* ==========================================================================
+ *  5. OVERLAY LOGIC (The "Fix" for your Window sizing)
+ *  ========================================================================== */
+/* 1. Base Overlay - Reset any generic size rules */
+/* 1. Force the overlay to float */
 #overlay-panel {
-display: none;
-position: fixed;
-top: 20%; left: 30%;
-width: 40%;
-background: var(--bg-card);
-border: 2px solid var(--accent-purple);
-padding: 20px;
-box-shadow: 0 0 20px var(--accent-purple);
-z-index: 1000;
+display: none; /* Hidden by default */
+position: fixed; /* Floats over everything */
+top: 0;
+left: 0;
+width: 100vw;
+height: 100vh;
+background: rgba(0, 0, 0, 0.9); /* Dim the background */
+z-index: 9999; /* Forces it to the top layer */
+justify-content: center;
+align-items: center;
+flex-direction: column;
 }
 
+/* 2. Style the actual box */
+#overlay-panel.visible {
+display: flex; /* Only shown when class 'visible' is present */
+}
+
+/* Ensure the box has dimensions when visible */
+#overlay-panel > div, #overlay-panel > h3 {
+background: #000;
+border: 1px solid var(--accent-cyan);
+padding: 20px;
+max-width: 80%;
+}
+
+/* 2. Compact Mode (Menu) */
+.panel-compact {
+    width: 300px;
+    height: auto;
+    display: block;
+}
+
+/* 3. Expanded Mode (Files) */
+.panel-expanded {
+    width: 80vw;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Helper to prevent Alpine flash-of-content */
+[x-cloak] { display: none !important; }
+
+.file-list {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.controls {
+    flex-shrink: 0;
+    display: flex;
+    gap: 10px;
+}
+
+/* ==========================================================================
+ *  6. UTILITIES & ANIMATIONS
+ *  ========================================================================== */
 @keyframes glitch {
     0% { transform: translate(0); }
     50% { transform: translate(-2px, 1px); }
     100% { transform: translate(0); }
-}
-
-.controls-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 10px; /* Space between elements */
-    margin-bottom: 20px;
-    max-width: 300px; /* Constrain the width so they aren't huge */
-}
-
-.controls-wrapper select,
-.controls-wrapper button {
-    width: 100%; /* Makes both match in width */
-}
-
-.control-panel {
-    display: block;
-    margin-bottom: 20px;
 }
 
 #theme-selector {
@@ -135,23 +186,52 @@ background-color: var(--bg-card);
 color: var(--text-primary);
 border: 1px solid var(--border-color);
 padding: 8px 12px;
-border-radius: 4px;
 cursor: pointer;
-font-family: inherit; /* Keeps your chosen UI font */
-appearance: none; /* Removes the ugly default browser arrow */
--webkit-appearance: none;
--moz-appearance: none;
-background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
-background-repeat: no-repeat;
-background-position-x: 100%;
-background-position-y: 5px;
 }
 
-#theme-selector:hover {
-border-color: var(--accent-cyan);
+/* The background dimming layer */
+.modal-overlay {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: rgba(0, 0, 0, 0.9) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 9999 !important;
 }
 
-#theme-selector option {
-background-color: var(--bg-main);
-color: var(--text-primary);
+/* The actual window */
+.modal-window {
+    width: 80vw !important;
+    max-height: 80vh !important;
+    background: #0d0d0d !important;
+    border: 2px solid var(--accent-cyan, #00ffff) !important;
+    padding: 20px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow-y: auto !important;
+}
+
+/* Hide when inactive */
+[x-cloak] { display: none !important; }
+
+/* 1. Force the Headless UI overlay to show */
+[x-dialog] {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.8); /* Darken the background */
+    z-index: 9999 !important;    /* Push to absolute top */
+}
+
+/* 2. Ensure your custom panel styles override standard div rules */
+.panel-compact,
+.panel-expanded {
+    display: block !important;
+    position: relative;
+    z-index: 10000;
+    margin: auto; /* Centers the box */
 }

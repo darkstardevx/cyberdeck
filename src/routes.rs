@@ -79,22 +79,37 @@ pub async fn get_themes_list() -> impl IntoResponse {
     Json(themes)
 }
 
-#[derive(Deserialize)]
-pub struct DeckAction {
-    pub action: String, // "open", "copy", "archive"
+pub async fn list_diagnostics() -> Json<Vec<String>> {
+    let paths = std::fs::read_dir("./diagnostics")
+    .map(|entries| {
+        entries.filter_map(|e| e.ok())
+        .map(|e| e.file_name().to_string_lossy().into_owned())
+        .collect()
+    })
+    .unwrap_or_default();
+    Json(paths)
 }
 
-pub async fn handle_deck_action(Json(payload): Json<DeckAction>) -> String {
+#[derive(Deserialize)]
+pub struct DeckAction {
+    pub action: String,
+}
+
+pub async fn post_cyberdeck_action(Json(payload): Json<DeckAction>) -> Json<String> {
+    println!("DEBUG: Action received: {}", payload.action);
+
     match payload.action.as_str() {
         "open" => {
-            let _ = open::that("./output"); // Requires 'open' crate
-            "Opening folder...".to_string()
+            let _ = open::that("./diagnostics");
+            Json("System: Opening output...".to_string())
         },
         "archive" => {
-            // Simple logic to zip the directory
-            let _ = Command::new("zip").args(["-r", "output.zip", "./output"]).output();
-            "Archiving...".to_string()
+            let _ = std::process::Command::new("zip")
+            .args(["-r", "output_archive.zip", "./diagnostics"])
+            .output();
+            Json("System: Archive created.".to_string())
         },
-        _ => "Action Unknown".to_string()
+        _ => Json("System: Unknown command.".to_string())
     }
 }
+

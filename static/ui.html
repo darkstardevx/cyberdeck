@@ -4,6 +4,21 @@
     <meta charset="UTF-8">
     <title>CYBERDECK Core</title>
     <link rel="stylesheet" href="ui.css">
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        /* Essential styles to force the modal to overlay correctly */
+        [x-cloak] { display: none !important; }
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.9); z-index: 9999;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .modal-content {
+            background: #000; border: 2px solid var(--accent-cyan, #00ffff);
+            padding: 20px; width: 80%; max-width: 600px;
+        }
+    </style>
+
     <script>
         // --- 1. Theme Management ---
         async function loadThemeList() {
@@ -11,160 +26,104 @@
             try {
                 const response = await fetch('/api/themes');
                 if (!response.ok) throw new Error('Failed to fetch themes');
-
                 const themeData = await response.json();
-
-                // Add the "Reset" option first
                 selector.innerHTML = '<option value="reset">-- DEFAULT (CYBERDECK) --</option>';
-
                 for (const [folder, files] of Object.entries(themeData)) {
-                    const group = document.createElement('optgroup');
-                    group.label = folder;
-
+                    const group = document.createElement('optgroup'); group.label = folder;
                     files.forEach(fileName => {
                         const option = document.createElement('option');
-                        option.value = `${folder}/${fileName}`;
-                        option.textContent = fileName;
+                        option.value = `${folder}/${fileName}`; option.textContent = fileName;
                         group.appendChild(option);
                     });
                     selector.appendChild(group);
                 }
-            } catch (err) {
-                console.error("Error loading theme list:", err);
-            }
-        }
-
-        function resetTheme() {
-            localStorage.removeItem('selectedTheme');
-            window.location.reload(); // Hard reset to default CSS
+            } catch (err) { console.error("Error loading theme list:", err); }
         }
 
         async function applySelectedTheme() {
             const selector = document.getElementById('theme-selector');
             const value = selector.value;
-
             if (!value) return;
-            if (value === "reset") {
-                resetTheme();
-                return;
-            }
-
+            if (value === "reset") { localStorage.removeItem('selectedTheme'); window.location.reload(); return; }
             const [folder, theme] = value.split('/');
             const path = `/themes/sub-cyber/${folder}/${theme}.json`;
-
             try {
                 const response = await fetch(path);
                 const data = await response.json();
-
-                // Define the translation map
-                const themeMap = {
-                    "background": "bg-main",
-                    "foreground": "text-primary",
-                };
-
-                // Apply mapped values
+                const themeMap = { "background": "bg-main", "foreground": "text-primary" };
                 for (const [jsonKey, cssVarName] of Object.entries(themeMap)) {
-                    if (data[jsonKey]) {
-                        document.documentElement.style.setProperty(`--${cssVarName}`, data[jsonKey]);
-                    }
+                    if (data[jsonKey]) document.documentElement.style.setProperty(`--${cssVarName}`, data[jsonKey]);
                 }
-
-                // Map specific colors from the 'colors' array
                 if (Array.isArray(data.colors)) {
                     const colors = data.colors;
                     if (colors[9]) document.documentElement.style.setProperty('--accent-cyan', colors[9]);
                     if (colors[11]) document.documentElement.style.setProperty('--accent-purple', colors[11]);
                     if (colors[10]) document.documentElement.style.setProperty('--accent-amber', colors[10]);
                 }
-
                 localStorage.setItem('selectedTheme', value);
-            } catch (err) {
-                console.error("Failed to apply theme:", err);
-            }
+            } catch (err) { console.error("Failed to apply theme:", err); }
         }
 
         // --- 2. Command Dispatcher ---
         async function sendCommand(command, btn) {
             const originalText = btn.innerText;
-            btn.innerText = "⚡ EXECUTING...";
-            btn.disabled = true;
-
+            btn.innerText = "⚡ EXECUTING..."; btn.disabled = true;
             try {
-                const res = await fetch('/api/cyberdeck/command', {
+                const res = await fetch('/cyberdeck/api/command', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(command)
                 });
-
-                if (res.ok) {
-                    btn.style.background = "var(--accent-cyan)";
-                    btn.innerText = "✅ COMPLETE";
-                    setTimeout(() => window.location.reload(), 800);
-                } else {
-                    throw new Error(await res.text());
-                }
-            } catch (err) {
-                alert('System Error: ' + err.message);
-                btn.innerText = originalText;
-                btn.disabled = false;
-            }
+                if (res.ok) { btn.style.background = "var(--accent-cyan)"; btn.innerText = "✅ COMPLETE"; setTimeout(() => window.location.reload(), 800); }
+                else { throw new Error(await res.text()); }
+            } catch (err) { alert('System Error: ' + err.message); btn.innerText = originalText; btn.disabled = false; }
         }
 
-        // --- 3. Page Initialization ---
+        // --- 3. Initialization ---
         window.addEventListener('DOMContentLoaded', async () => {
             await loadThemeList();
-
-            // Restore saved theme
             const saved = localStorage.getItem('selectedTheme');
-            if (saved) {
-                const selector = document.getElementById('theme-selector');
-                selector.value = saved;
-                applySelectedTheme();
-            }
+            if (saved) { const selector = document.getElementById('theme-selector'); selector.value = saved; applySelectedTheme(); }
         });
     </script>
 </head>
 <body>
     <h2>⚡ CYBERDECK ⚡</h2>
 
-    <div class="control-panel">
-    <select id="theme-selector" onchange="applySelectedTheme()">
-        <option value="">Loading themes...</option>
-    </select>
+    <div x-data="{ isOpen: false, currentView: 'menu', files: [] }" @keydown.escape.window="isOpen = false">
 
-    <br><br> <!-- This forces the line break -->
+        <button @click="isOpen = true" style="border: 2px solid var(--accent-amber);">
+            ⚡ ACCESS DATA TERMINAL
+        </button>
 
-    <button onclick="toggleActionOverlay()" style="border: 2px solid var(--accent-amber)">
-        ⚡ ACCESS DATA TERMINAL
-    </button>
-</div>
+        <div x-show="isOpen" x-cloak class="modal-overlay">
+            <div class="modal-content">
 
-<!-- The Overlay -->
-<div id="overlay-panel">
-    <h3>[SYSTEM_ACTIONS]</h3>
-    <button onclick="runAction('open')">📂 OPEN OUTPUT</button>
-    <button onclick="runAction('copy')">📋 COPY PATH</button>
-    <button onclick="runAction('archive')">📦 ARCHIVE FILES</button>
-    <button onclick="toggleActionOverlay()">❌ CLOSE</button>
-</div>
+                <div x-show="currentView === 'menu'">
+                    <h3>[SYSTEM_COMMANDS]</h3>
+                    <button @click="currentView = 'files'; fetch('/cyberdeck/api/list').then(r => r.json()).then(d => files = d);">📂 OPEN DIAGNOSTICS</button>
+                    <button @click="runAction('archive')">📦 ARCHIVE FILES</button>
+                    <button @click="isOpen = false">❌ CLOSE</button>
+                </div>
 
-<script>
-function toggleActionOverlay() {
-    const panel = document.getElementById('overlay-panel');
-    panelOr = panel.style.display;
-    panel.style.display = (panelOr === 'block') ? 'none' : 'block';
-}
-
-async function runAction(action) {
-    const res = await fetch('/api/cyberdeck/action', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: action })
-    });
-    const msg = await res.text();
-    alert("SYSTEM: " + msg);
-}
-</script>
+                <div x-show="currentView === 'files'" style="display: flex; flex-direction: column;">
+                    <h3>[FILE_SYSTEM]</h3>
+                    <div style="flex: 1; overflow-y: auto; max-height: 300px;">
+                        <template x-for="file in files" :key="file">
+                            <div style="display: flex; justify-content: space-between; padding: 5px 0;">
+                                <span x-text="file"></span>
+                                <button @click="navigator.clipboard.writeText('./diagnostics/' + file); alert('Copied: ' + file)">CPY</button>
+                            </div>
+                        </template>
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <button @click="currentView = 'menu'">BACK</button>
+                        <button @click="isOpen = false">CLOSE</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="panel">
         <strong>DISPLAY STATUS:</strong> <span class="status-val">{{DISPLAY_STATUS}}</span> |
@@ -191,7 +150,6 @@ async function runAction(action) {
             { label: "⚙️ INSPECT SYSTEM DAEMONS", cmd: "RunServicesModule" },
             { label: "🧩 QUERY MAINBOARD BUS", cmd: "RunMotherboardModule" }
         ];
-
         const container = document.getElementById('button-container');
         modules.forEach(mod => {
             const btn = document.createElement('button');
