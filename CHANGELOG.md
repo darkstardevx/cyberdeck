@@ -1,6 +1,6 @@
 # Changelog - CYBERDECK
 
-## [0.1.0-alpha.4] - 2026-07-13
+## [0.1.0-alpha.5] - 2026-07-13
 ### Added
 - Dynamic theme selector with real-time CSS variable injection
 - "Default (CYBERDECK)" reset functionality for UI restoration
