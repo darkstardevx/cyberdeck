@@ -44,6 +44,12 @@ h3 {
     margin-top: 30px;
 }
 
+h4 {
+    color: var(--accent-cyan);
+    text-shadow: 0 0 5px rgba(6, 182, 212, 0.35);
+    margin-top: 20px;
+}
+
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 15px; margin-top: 20px; }
 
 button {
@@ -87,3 +93,65 @@ ul {
 li { padding: 6px 0; border-bottom: 1px solid var(--border-color); font-size: 13px; color: var(--text-primary); }
 
 .status-val { color: var(--accent-amber); font-weight: bold; }
+
+#overlay-panel {
+display: none;
+position: fixed;
+top: 20%; left: 30%;
+width: 40%;
+background: var(--bg-card);
+border: 2px solid var(--accent-purple);
+padding: 20px;
+box-shadow: 0 0 20px var(--accent-purple);
+z-index: 1000;
+}
+
+@keyframes glitch {
+    0% { transform: translate(0); }
+    50% { transform: translate(-2px, 1px); }
+    100% { transform: translate(0); }
+}
+
+.controls-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Space between elements */
+    margin-bottom: 20px;
+    max-width: 300px; /* Constrain the width so they aren't huge */
+}
+
+.controls-wrapper select,
+.controls-wrapper button {
+    width: 100%; /* Makes both match in width */
+}
+
+.control-panel {
+    display: block;
+    margin-bottom: 20px;
+}
+
+#theme-selector {
+background-color: var(--bg-card);
+color: var(--text-primary);
+border: 1px solid var(--border-color);
+padding: 8px 12px;
+border-radius: 4px;
+cursor: pointer;
+font-family: inherit; /* Keeps your chosen UI font */
+appearance: none; /* Removes the ugly default browser arrow */
+-webkit-appearance: none;
+-moz-appearance: none;
+background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+background-repeat: no-repeat;
+background-position-x: 100%;
+background-position-y: 5px;
+}
+
+#theme-selector:hover {
+border-color: var(--accent-cyan);
+}
+
+#theme-selector option {
+background-color: var(--bg-main);
+color: var(--text-primary);
+}

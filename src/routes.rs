@@ -15,6 +15,9 @@ use axum::{
 use crate::types::{SharedCyberdeckState, CyberdeckCommand};
 use crate::dispatcher;
 
+use serde::{Deserialize};
+use std::process::Command;
+
 /// Renders the primary HTML index page.
 ///
 /// Injects the current system state, including display status, stealth mode,
@@ -74,4 +77,24 @@ pub async fn get_themes_list() -> impl IntoResponse {
         }
     }
     Json(themes)
+}
+
+#[derive(Deserialize)]
+pub struct DeckAction {
+    pub action: String, // "open", "copy", "archive"
+}
+
+pub async fn handle_deck_action(Json(payload): Json<DeckAction>) -> String {
+    match payload.action.as_str() {
+        "open" => {
+            let _ = open::that("./output"); // Requires 'open' crate
+            "Opening folder...".to_string()
+        },
+        "archive" => {
+            // Simple logic to zip the directory
+            let _ = Command::new("zip").args(["-r", "output.zip", "./output"]).output();
+            "Archiving...".to_string()
+        },
+        _ => "Action Unknown".to_string()
+    }
 }

@@ -127,9 +127,44 @@
 <body>
     <h2>⚡ CYBERDECK ⚡</h2>
 
+    <div class="control-panel">
     <select id="theme-selector" onchange="applySelectedTheme()">
         <option value="">Loading themes...</option>
     </select>
+
+    <br><br> <!-- This forces the line break -->
+
+    <button onclick="toggleActionOverlay()" style="border: 2px solid var(--accent-amber)">
+        ⚡ ACCESS DATA TERMINAL
+    </button>
+</div>
+
+<!-- The Overlay -->
+<div id="overlay-panel">
+    <h3>[SYSTEM_ACTIONS]</h3>
+    <button onclick="runAction('open')">📂 OPEN OUTPUT</button>
+    <button onclick="runAction('copy')">📋 COPY PATH</button>
+    <button onclick="runAction('archive')">📦 ARCHIVE FILES</button>
+    <button onclick="toggleActionOverlay()">❌ CLOSE</button>
+</div>
+
+<script>
+function toggleActionOverlay() {
+    const panel = document.getElementById('overlay-panel');
+    panelOr = panel.style.display;
+    panel.style.display = (panelOr === 'block') ? 'none' : 'block';
+}
+
+async function runAction(action) {
+    const res = await fetch('/api/cyberdeck/action', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: action })
+    });
+    const msg = await res.text();
+    alert("SYSTEM: " + msg);
+}
+</script>
 
     <div class="panel">
         <strong>DISPLAY STATUS:</strong> <span class="status-val">{{DISPLAY_STATUS}}</span> |
