@@ -7,7 +7,9 @@
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
         [x-cloak] { display: none !important; }
-        .modal-overlay {
+
+        /* Modal & Log Overlays */
+        .modal-overlay, .log-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0,0,0,0.9); z-index: 9999;
             display: flex; align-items: center; justify-content: center;
@@ -16,13 +18,28 @@
             background: #000; border: 2px solid var(--accent-cyan, #00ffff);
             padding: 20px; width: 80%; max-width: 600px;
         }
+
+        /* Log Terminal Specifics */
+        .log-terminal {
+            width: 70vw; height: 70vh;
+            background: #050505 !important;
+            border: 1px solid #333 !important;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+            font-family: 'Courier New', Courier, monospace !important;
+            color: #00ff41 !important;
+            font-size: 0.85rem !important;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
     </style>
 
     <script>
         // --- 1. Theme Management ---
         async function loadThemeList() {
             const selector = document.getElementById('theme-selector');
-            if (!selector) return; // Safety check
+            if (!selector) return;
             try {
                 const response = await fetch('/api/themes');
                 if (!response.ok) throw new Error('Failed to fetch themes');
@@ -96,39 +113,52 @@
         </select>
     </div>
 
-    <div x-data="{ isOpen: false, currentView: 'menu', files: [] }" @keydown.escape.window="isOpen = false">
+    <div x-data="{ isOpen: false, isFeedOpen: false, currentView: 'menu', files: [] }"
+         @keydown.escape.window="isOpen = false; isFeedOpen = false">
 
-        <button @click="isOpen = true" style="border: 2px solid var(--accent-amber); margin-top: 10px;">
-            ⚡ ACCESS DATA TERMINAL
-        </button>
+        <div style="margin: 20px 0;">
+            <button @click="isOpen = true" style="border: 2px solid var(--accent-amber);">⚡ ACCESS DATA TERMINAL</button>
+            <button @click="isFeedOpen = true" style="border: 2px solid #00ff41; margin-left: 10px;">📟 LIVE SYSTEM FEED</button>
+        </div>
 
         <div x-show="isOpen" x-cloak class="modal-overlay" @click.self="isOpen = false">
-    <div class="modal-content">
+            <div class="modal-content">
+                <div x-show="currentView === 'menu'">
+                    <h3>[SYSTEM_COMMANDS]</h3>
+                    <button @click="currentView = 'files'; fetch('/cyberdeck/api/list').then(r => r.json()).then(d => files = d);">📂 OPEN DIAGNOSTICS</button>
+                    <button @click="isOpen = false">❌ CLOSE</button>
+                </div>
 
-        <div x-show="currentView === 'menu'">
-            <h3>[SYSTEM_COMMANDS]</h3>
-            <button @click="currentView = 'files'; fetch('/cyberdeck/api/list').then(r => r.json()).then(d => files = d);">📂 OPEN DIAGNOSTICS</button>
-            <button @click="runAction('archive')">📦 ARCHIVE FILES</button>
-            <button @click="isOpen = false">❌ CLOSE</button>
-        </div>
-
-        <div x-show="currentView === 'files'" style="display: flex; flex-direction: column;">
-            <h3>[FILE_SYSTEM]</h3>
-            <div style="flex: 1; overflow-y: auto; max-height: 300px;">
-                <template x-for="file in files" :key="file">
-                    <div style="display: flex; justify-content: space-between; padding: 5px 0;">
-                        <span x-text="file"></span>
-                        <button @click="navigator.clipboard.writeText('./diagnostics/' + file); alert('Copied: ' + file)">CPY</button>
+                <div x-show="currentView === 'files'" style="display: flex; flex-direction: column;">
+                    <h3>[FILE_SYSTEM]</h3>
+                    <div style="flex: 1; overflow-y: auto; max-height: 300px;">
+                        <template x-for="file in files" :key="file">
+                            <div style="display: flex; justify-content: space-between; padding: 5px 0;">
+                                <span x-text="file"></span>
+                                <button @click="navigator.clipboard.writeText('./diagnostics/' + file); alert('Copied: ' + file)">CPY</button>
+                            </div>
+                        </template>
                     </div>
-                </template>
-            </div>
-            <div style="margin-top: 20px;">
-                <button @click="currentView = 'menu'">BACK</button>
-                <button @click="isOpen = false">CLOSE</button>
+                    <div style="margin-top: 20px;">
+                        <button @click="currentView = 'menu'">BACK</button>
+                        <button @click="isOpen = false">CLOSE</button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
+
+        <div x-show="isFeedOpen" x-cloak class="log-overlay" @click.self="isFeedOpen = false">
+            <div class="log-terminal">
+                <h3>[LIVE_SYSTEM_FEED_DUMP]</h3>
+                <div style="flex: 1; overflow-y: auto;">
+                    <ul>
+                        <li>[1784022501] Display system activated.</li>
+                        <li>[1784022502] Loading modules...</li>
+                    </ul>
+                </div>
+                <button @click="isFeedOpen = false" style="margin-top: 20px; background: #111; color: #00ff41; border: 1px solid #00ff41;">CLOSE_TERMINAL</button>
+            </div>
+        </div>
     </div>
 
     <div class="panel">
@@ -164,8 +194,5 @@
             container.appendChild(btn);
         });
     </script>
-
-    <h3>📟 LIVE SYSTEM FEED</h3>
-    <ul>{{SYSTEM_LOGS}}</ul>
 </body>
 </html>

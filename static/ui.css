@@ -189,6 +189,9 @@ padding: 8px 12px;
 cursor: pointer;
 }
 
+/* ==========================================================================
+ *  7. MODAL OVERLAY
+ *  ========================================================================== */
 /* The background dimming layer */
 * Overlay sits on top but passes clicks through to the window */
 .modal-overlay {
@@ -238,3 +241,31 @@ cursor: pointer;
     z-index: 10000;
     margin: auto; /* Centers the box */
 }
+
+/* ==========================================================================
+ *  8. LOG MODAL OVERLAY
+ *  ========================================================================== */
+.log-overlay {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0, 0, 0, 0.95); /* Deeper black */
+    z-index: 10000; display: flex; align-items: center; justify-content: center;
+}
+
+/* The Terminal Window */
+.log-terminal {
+    width: 70vw; height: 70vh;
+    background: #050505 !important; /* Hardcoded dark */
+    border: 1px solid #333 !important;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+    font-family: 'Courier New', Courier, monospace !important;
+    color: #00ff41 !important; /* Classic terminal green */
+    font-size: 0.85rem !important; /* Smaller font */
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.log-terminal h3 { color: #fff !important; border-bottom: 1px solid #00ff41; padding-bottom: 10px; }
+.log-terminal ul { list-style: none; padding: 0; }
+.log-terminal li { margin-bottom: 5px; opacity: 0.8; }
