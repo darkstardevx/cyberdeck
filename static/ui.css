@@ -190,17 +190,20 @@ cursor: pointer;
 }
 
 /* The background dimming layer */
+* Overlay sits on top but passes clicks through to the window */
 .modal-overlay {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    background: rgba(0, 0, 0, 0.9) !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    z-index: 9999 !important;
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.9); z-index: 9999;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: auto; /* Ensure overlay receives clicks for closing */
+}
+
+/* Modal content must explicitly accept pointer events */
+.modal-content {
+    background: #000; border: 2px solid var(--accent-cyan, #00ffff);
+    padding: 20px; width: 80%; max-width: 600px;
+    pointer-events: auto; /* Crucial: This ensures buttons inside are clickable */
+    position: relative;
 }
 
 /* The actual window */
