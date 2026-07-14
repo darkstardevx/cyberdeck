@@ -69,16 +69,19 @@
 
     <h3>🔮 DISPATCH INFRASTRUCTURE SCANS</h3>
     <div class="grid">
-        <button onclick="sendCommand({ 'RunHardwareModule': './diagnostics' }, this)">🖥️ Scan Hardware Core</button>
-        <button onclick="sendCommand({ 'RunPowerModule': './diagnostics' }, this)">🔋 Scan Power Systems</button>
-        <button onclick="sendCommand({ 'RunMemoryModule': './diagnostics' }, this)">🧠 Scan Memory Subsystem</button>
-        <button onclick="sendCommand({ 'RunStorageAiModule': './diagnostics' }, this)">💾 Run Storage AI Analyzer</button>
-        <button onclick="sendCommand({ 'RunThermalModule': './diagnostics' }, this)">🌡️ Scan Core Thermals</button>
-        <button onclick="sendCommand({ 'RunNetworkModule': './diagnostics' }, this)">🌐 Scan Network Interfaces</button>
-        <button onclick="sendCommand({ 'RunFanModule': './diagnostics' }, this)">💨 Profile Fan Control</button>
-        <button onclick="sendCommand({ 'RunAudioModule': './diagnostics' }, this)">🎧 Profile Audio Sinks</button>
-        <button onclick="sendCommand({ 'RunBiosModule': './diagnostics' }, this)">📟 Check BIOS Layers</button>
-        <button onclick="sendCommand({ 'RunDisksModule': './diagnostics' }, this)">🎚️ Analyze Disks Architecture</button>
+        <button onclick="sendCommand({ 'RunHardwareModule': './diagnostics' }, this)">🖥️ Probe Hardware Core</button>
+        <button onclick="sendCommand({ 'RunPowerModule': './diagnostics' }, this)">🔌 Measure Power Draw</button>
+        <button onclick="sendCommand({ 'RunMemoryModule': './diagnostics' }, this)">🧠 Map Memory Banks</button>
+        <button onclick="sendCommand({ 'RunStorageAiModule': './diagnostics' }, this)">🤖 Execute Storage AI</button>
+        <button onclick="sendCommand({ 'RunThermalModule': './diagnostics' }, this)">🌡️ Monitor Thermal Array</button>
+        <button onclick="sendCommand({ 'RunNetworkModule': './diagnostics' }, this)">🌐 Trace Network Nodes</button>
+        <button onclick="sendCommand({ 'RunFanModule': './diagnostics' }, this)">🌬️ Sync Fan Velocity</button>
+        <button onclick="sendCommand({ 'RunAudioModule': './diagnostics' }, this)">🎧 Diagnose Audio Sinks</button>
+        <button onclick="sendCommand({ 'RunBiosModule': './diagnostics' }, this)">📟 Interrogate BIOS Layers</button>
+        <button onclick="sendCommand({ 'RunDisksModule': './diagnostics' }, this)">💽 Analyze Disk Topology</button>
+        <button onclick="sendCommand({ 'RunBatteryModule': './diagnostics' }, this)">🔋 Audit Battery Health</button>
+        <button onclick="sendCommand({ 'RunServicesModule': './diagnostics' }, this)">⚙️ Inspect System Daemons</button>
+        <button onclick="sendCommand({ 'RunMotherboardModule': './diagnostics' }, this)">🧩 Query Mainboard Bus</button>
     </div>
 
     <h3>📟 LIVE SYSTEM FEED</h3>
