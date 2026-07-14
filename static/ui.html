@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="ui.css">
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
-        /* Essential styles to force the modal to overlay correctly */
         [x-cloak] { display: none !important; }
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -23,6 +22,7 @@
         // --- 1. Theme Management ---
         async function loadThemeList() {
             const selector = document.getElementById('theme-selector');
+            if (!selector) return; // Safety check
             try {
                 const response = await fetch('/api/themes');
                 if (!response.ok) throw new Error('Failed to fetch themes');
@@ -90,9 +90,15 @@
 <body>
     <h2>⚡ CYBERDECK ⚡</h2>
 
+    <div class="control-panel">
+        <select id="theme-selector" onchange="applySelectedTheme()">
+            <option value="">Loading themes...</option>
+        </select>
+    </div>
+
     <div x-data="{ isOpen: false, currentView: 'menu', files: [] }" @keydown.escape.window="isOpen = false">
 
-        <button @click="isOpen = true" style="border: 2px solid var(--accent-amber);">
+        <button @click="isOpen = true" style="border: 2px solid var(--accent-amber); margin-top: 10px;">
             ⚡ ACCESS DATA TERMINAL
         </button>
 
