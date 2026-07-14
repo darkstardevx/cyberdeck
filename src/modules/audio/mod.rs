@@ -3,14 +3,14 @@
 //! This module provides deep introspection capabilities for the system's audio stack,
 //! specifically targeting **PipeWire**, **WirePlumber**, and **PulseAudio** compatibility layers.
 
-use crate::state::AppState;
+use crate::types::CyberdeckState;
 use std::fs::{self, OpenOptions};
 use std::io::Write;
 use std::process::Command;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 /// Executes the full audio diagnostic suite and generates a structured report.
-pub fn execute(_state: &AppState, dir: &str) -> Result<String, String> {
+pub async fn execute(_state: &CyberdeckState, dir: &str) -> Result<String, String> {
     let raw_dir = format!("{}/raw", dir);
     let parsed_dir = format!("{}/parsed", dir);
     let graph_dir = format!("{}/graph", dir);

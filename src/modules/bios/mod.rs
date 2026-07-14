@@ -12,14 +12,14 @@
 //!   core frequencies.
 
 use std::fs::{self, OpenOptions};
-use std::io::Write;
 use std::process::Command;
+use std::io::Write;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use crate::state::AppState;
+use crate::types::CyberdeckState;
 
 /// Executes the full-stack system diagnostic suite.
-pub async fn execute(_state: &AppState, params: &str) -> Result<String, String> {
+pub async fn execute(_state: &CyberdeckState, params: &str) -> Result<String, String> {
     let dir = params;
 
     // 1. Initialize Subdirectory Tree Structure

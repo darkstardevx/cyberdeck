@@ -11,13 +11,13 @@
 
 use std::fs;
 use std::process::Command;
-use crate::state::AppState;
+use crate::types::CyberdeckState;
 
 /// Executes the CPU diagnostic sweep.
 ///
 /// Generates a structured multi-file report covering architecture,
 /// thermal performance, and power state.
-pub async fn execute(_state: &AppState, params: &str) -> Result<String, String> {
+pub async fn execute(_state: &CyberdeckState, params: &str) -> Result<String, String> {
     let dir = params;
     let cpu_dir = format!("{}/cpu", dir);
     fs::create_dir_all(&cpu_dir).map_err(|e| e.to_string())?;

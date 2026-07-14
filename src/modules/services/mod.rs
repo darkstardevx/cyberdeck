@@ -10,7 +10,7 @@
 
 use std::fs;
 use std::process::Command;
-use crate::state::AppState;
+use crate::types::CyberdeckState;
 
 #[derive(Debug, PartialEq)]
 pub enum ServiceCategory {
@@ -28,7 +28,7 @@ pub struct ServiceItem {
 }
 
 /// Executes the service diagnostic suite.
-pub async fn execute(_state: &AppState, params: &str) -> Result<String, String> {
+pub async fn execute(_state: &CyberdeckState, params: &str) -> Result<String, String> {
     let dir = params;
     let base_f = format!("{}/services.md", dir);
 

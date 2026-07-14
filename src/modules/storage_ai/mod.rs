@@ -7,13 +7,13 @@
 //! - **Predictive Analytics**: Hooks into `smartctl` for hardware health.
 //! - **Layered Reporting**: Separates raw logs from human-readable intelligence.
 
-use crate::state::AppState;
+use crate::types::CyberdeckState;
 use std::fs;
 use std::process::Command;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 /// Executes the storage diagnostic logic.
-pub fn execute(_state: &AppState, dir: &str) -> Result<String, String> {
+pub async fn execute(_state: &CyberdeckState, dir: &str) -> Result<String, String> {
     // Note: We use 'dir' as the path, and 'state' is available for future
     // global config access if needed.
 

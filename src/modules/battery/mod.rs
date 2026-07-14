@@ -9,14 +9,13 @@
 //! - **Metrics**: Reads real-time capacity, energy, voltage, and power usage.
 
 use std::fs;
-use std::io::Write;
-use crate::state::AppState;
+use crate::types::CyberdeckState;
 
 /// Executes the battery diagnostic sweep.
 ///
 /// Scans the system's power management tree to identify and report on
 /// all detected power supply controllers.
-pub async fn execute(_state: &AppState, params: &str) -> Result<String, String> {
+pub async fn execute(_state: &CyberdeckState, params: &str) -> Result<String, String> {
     let dir = params;
     let bat_dir = format!("{}/battery", dir);
 

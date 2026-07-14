@@ -7,12 +7,11 @@
 //! - **Graceful Failure**: If run without sudo, it captures what it can and flags restricted access.
 
 use std::fs;
-use std::io::Write;
 use std::process::Command;
-use crate::state::AppState;
+use crate::types::CyberdeckState;
 
 /// Executes motherboard and BIOS diagnostic suite.
-pub async fn execute(_state: &AppState, params: &str) -> Result<String, String> {
+pub async fn execute(_state: &CyberdeckState, params: &str) -> Result<String, String> {
     let dir = params;
     let board_dir = format!("{}/motherboard", dir);
 

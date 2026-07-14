@@ -11,10 +11,10 @@
 use std::fs;
 use std::process::Command;
 use std::time::{SystemTime, UNIX_EPOCH};
-use crate::state::AppState;
+use crate::types::CyberdeckState;
 
 /// Executes the thermal diagnostic suite.
-pub async fn execute(_state: &AppState, dir: &str) -> Result<String, String> {
+pub async fn execute(_state: &CyberdeckState, dir: &str) -> Result<String, String> {
     let base_f = format!("{}/thermal_ai.md", dir);
     let raw_f = format!("{}/raw/raw_temps.md", dir);
     let parsed_f = format!("{}/parsed/parsed_temps.md", dir);

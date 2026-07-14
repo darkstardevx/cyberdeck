@@ -53,9 +53,6 @@ pub fn parse_cyberdeck_script(script: &str) -> Vec<CyberdeckCommand> {
             "disks" => {
                 CyberdeckCommand::RunDisksModule(parts.get(1).unwrap_or(&"default").to_string())
             }
-            "ethernet" => {
-                CyberdeckCommand::RunEthernetModule(parts.get(1).unwrap_or(&"default").to_string())
-            }
             "fan" => CyberdeckCommand::RunFanModule(parts.get(1).unwrap_or(&"default").to_string()),
             "hardware" => {
                 CyberdeckCommand::RunHardwareModule(parts.get(1).unwrap_or(&"default").to_string())

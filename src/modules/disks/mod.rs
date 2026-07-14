@@ -9,21 +9,24 @@
 //! - **Mountpoints**: Automatically maps and tracks `/media` and `/run/media` for external drive visibility.
 
 use std::fs::{self, OpenOptions};
-use std::io::Write;
 use std::process::Command;
+use std::io::Write;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use crate::state::AppState;
+use crate::types::CyberdeckState;
 
 /// Executes the full disk diagnostic suite.
 ///
 /// Scans block devices, identifies partition/mount configurations, and performs
 /// deep-dive health checks on detected hardware.
-pub async fn execute(_state: &AppState, params: &str) -> Result<String, String> {
+pub async fn execute(_state: &CyberdeckState, params: &str) -> Result<String, String> {
     let dir = params;
 
+    // Ensure the base directory exists
+    fs::create_dir_all(dir).map_err(|e| e.to_string())?;
+
     // 1. Structural Setup
-    let layout = ["nvme", "ssd", "hdd", "us", ".as_bytes()media", "raw"];
+    let layout = ["nvme", "ssd", "hdd", "usb", "media", "raw"];
     for folder in layout {
         fs::create_dir_all(format!("{}/{}", dir, folder)).map_err(|e| e.to_string())?;
     }

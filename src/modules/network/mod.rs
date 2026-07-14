@@ -4,14 +4,14 @@
 //! routing tables, DNS resolution, and driver/hardware auditing.
 
 use std::fs::{self, OpenOptions};
-use std::io::Write;
 use std::process::Command;
+use std::io::Write;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use crate::state::AppState;
+use crate::types::CyberdeckState;
 
 /// Executes the comprehensive network diagnostic sweep.
-pub async fn execute(_state: &AppState, params: &str) -> Result<String, String> {
+pub async fn execute(_state: &CyberdeckState, params: &str) -> Result<String, String> {
     let dir = params;
 
     // 1. Structural Setup

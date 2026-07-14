@@ -11,13 +11,11 @@ mod parser;
 mod modules;
 mod dispatcher;
 mod routes;
-pub mod state;
-use crate::state::AppState;
+use crate::types::CyberdeckState;
 
 use axum::{routing::{get, post}, Router};
 use std::sync::Arc;
 use tokio::sync::Mutex;
-use crate::types::CyberdeckState;
 use crate::parser::parse_cyberdeck_script;
 
 /// Primary entry point.

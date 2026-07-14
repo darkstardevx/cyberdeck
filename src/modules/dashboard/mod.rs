@@ -9,10 +9,10 @@
 
 use std::fs;
 use std::process::Command;
-use crate::state::AppState;
+use crate::types::CyberdeckState;
 
 /// Executes the live dashboard diagnostic sweep.
-pub async fn execute(_state: &AppState, params: &str) -> Result<String, String> {
+pub async fn execute(_state: &CyberdeckState, params: &str) -> Result<String, String> {
     let dir = params;
     let base_f = format!("{}/dashboard.md", dir);
     let mut report = String::from("# 👁 CYBERDECK: LIVE DASHBOARD\n\n");

@@ -10,7 +10,6 @@ pub enum CyberdeckModule {
     AudioDiagnostics,
     BiosDiagnostics,
     DisksDiagnostics,
-    EthernetDiagnostics,
     FanDiagnostics,
     MemoryDiagnostics,
     PowerDiagnostics,

@@ -8,14 +8,13 @@
 //! - **Graceful Degradation**: Handles missing diagnostic tools (lshw/dmidecode) by providing fallback info.
 
 use std::fs;
-use std::io::Write;
 use std::process::Command;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use crate::state::AppState;
+use crate::types::CyberdeckState;
 
 /// Executes the hardware intelligence diagnostic suite.
-pub async fn execute(_state: &AppState, params: &str) -> Result<String, String> {
+pub async fn execute(_state: &CyberdeckState, params: &str) -> Result<String, String> {
     let dir = params;
     let base_f = format!("{}/hardware.md", dir);
     let timestamp = SystemTime::now()

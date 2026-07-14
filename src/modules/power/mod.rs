@@ -8,14 +8,13 @@
 //! - **Energy Aware**: Integrates with `upower` for battery and power source state.
 
 use std::fs;
-use std::io::Write;
 use std::process::Command;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use crate::state::AppState;
+use crate::types::CyberdeckState;
 
 /// Executes the power/performance diagnostic suite.
-pub async fn execute(_state: &AppState, params: &str) -> Result<String, String> {
+pub async fn execute(_state: &CyberdeckState, params: &str) -> Result<String, String> {
     let dir = params;
     let base_f = format!("{}/power.md", dir);
 
