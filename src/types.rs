@@ -41,6 +41,8 @@ pub enum CyberdeckCommand {
     RunStorageAiModule(String),
     RunThermalModule(String),
 
+    ArchiveFiles(String),
+
     Unknown(String),
 }
 

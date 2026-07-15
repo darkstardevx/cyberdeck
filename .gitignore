@@ -1,3 +1,5 @@
 /diagnostics/
 /target/
 .directory
+/output/
+/snippets/

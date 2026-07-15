@@ -19,6 +19,8 @@ use tower_http::services::ServeDir; // 1. Added import
 /// Primary entry point.
 #[tokio::main]
 async fn main() {
+    tracing_subscriber::fmt::init();
+    tracing::info!("Starting Cyberdeck System...");
     let state = Arc::new(Mutex::new(CyberdeckState {
         display_active: false,
         active_modules: Vec::new(),
