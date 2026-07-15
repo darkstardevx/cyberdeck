@@ -16,7 +16,6 @@ use crate::types::{SharedCyberdeckState, CyberdeckCommand};
 use crate::dispatcher;
 
 use serde::{Deserialize};
-use std::process::Command;
 
 /// Renders the primary HTML index page.
 ///
@@ -49,7 +48,7 @@ pub async fn post_cyberdeck_command(State(state): State<SharedCyberdeckState>, J
     Json("Instruction pipeline advanced successfully.".to_string())
 }
 
-use serde_json::{json, Value};
+use serde_json::json;
 use std::fs;
 
 pub async fn get_themes_list() -> impl IntoResponse {

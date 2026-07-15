@@ -22,6 +22,7 @@ pub fn write_header(file: &mut File, status: &str) -> std::io::Result<()> {
 }
 
 // THE NEW HELPER: Standardizes initialization
+#[allow(dead_code)]
 pub fn init_diagnostic_file(dir: &str, filename: &str) -> Result<File, String> {
     fs::create_dir_all(dir).map_err(|e| e.to_string())?;
     let path = format!("{}/{}", dir, filename);

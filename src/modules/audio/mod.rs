@@ -8,7 +8,6 @@ use crate::modules::utils::write_header; // Assuming your helper is here
 use std::fs::{self, OpenOptions, File};
 use std::io::Write;
 use std::process::Command;
-use std::time::{SystemTime, UNIX_EPOCH};
 
 /// Executes the full audio diagnostic suite and generates a structured report.
 pub async fn execute(_state: &CyberdeckState, dir: &str) -> Result<String, String> {
