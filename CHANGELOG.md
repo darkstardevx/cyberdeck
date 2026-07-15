@@ -41,3 +41,6 @@ We added **Alpine.js** to handle the frontend interactivity because it provides 
 We integrated **HeadlessUI** to ensure the interface is accessible and robust.
 * **Accessibility:** It handles the complex "behind-the-scenes" state (like focus management for modals or the state of a dropdown) that is notoriously difficult to write from scratch.
 * **Unstyled Components:** Because CYBERDECK requires a specific aesthetic, HeadlessUI gives us the *logic* (the "headless" part) but leaves the *styling* entirely up to us, ensuring the UI remains perfectly in character.
+
+## [1.0.0] - 2026-07-14
+* **Moved from Alpha to Stable**
