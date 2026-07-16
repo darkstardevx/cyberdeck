@@ -1,0 +1,14 @@
+{
+  "name": "Synthwave_Miami_Vise",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "neon",
+  "background": "#090414",
+  "foreground": "#00f0ff",
+  "cursor": "#f35588",
+  "colors": [
+    "#04020a", "#150a2e", "#291359", "#411f8c",
+    "#5c2bc4", "#7b3bfe", "#341870", "#1f0e42",
+    "#00f0ff", "#f35588", "#05dfd7", "#ea00d9",
+    "#240090", "#3500d3", "#190061", "#ffffff"
+  ]
+}

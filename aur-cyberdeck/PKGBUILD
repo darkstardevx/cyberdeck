@@ -1,0 +1,36 @@
+# PKGBUILD for CYBERDECK
+pkgname=cyberdeck
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="A modular system diagnostic dashboard with hardware monitoring and archival tools"
+arch=('x86_64')
+url="https://github.com/darkstardevx/cyberdeck"
+license=('MIT') # Or your specific license
+depends=('glibc' 'gcc-libs')
+makedepends=('rust' 'cargo')
+source=("$pkgname-$pkgver.tar.gz::$url/archive/v$pkgver.tar.gz")
+sha256sums=('abb60dc9783bd57aa2ff934dd0a1297adfa752cf4e124c0c7532b6de33650f7f')
+
+build() {
+    # Ensure we are in the source directory
+    cd "$srcdir/${pkgname}-${pkgver}"
+
+    # Build the project
+    cargo build --release --offline
+}
+
+package() {
+    # Ensure we are in the source directory
+    cd "$srcdir/${pkgname}-${pkgver}"
+
+    # Create the install directory
+    install -Dm755 "target/release/cyberdeck_core" "$pkgdir/usr/bin/cyberdeck"
+
+    # Install the themes folder recursively
+    install -d "$pkgdir/usr/share/cyberdeck/themes"
+    cp -r themes/* "$pkgdir/usr/share/cyberdeck/themes/"
+
+    # Install documentation
+    install -Dm644 CHANGELOG.md "$pkgdir/usr/share/doc/$pkgname/CHANGELOG.md"
+    install -Dm644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
+}

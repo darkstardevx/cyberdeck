@@ -7,6 +7,12 @@
 //! - **Status**: Detects PWM enabled/disabled states.
 //! - **Diagnostic**: Flags stalls (High PWM + 0 RPM).
 
+//-NOTE: Cooling & Thermal Diagnostic Module (/src/modules/fan/mod.rs)
+//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+//-END
+
 use std::fs;
 use std::time::{SystemTime, UNIX_EPOCH};
 

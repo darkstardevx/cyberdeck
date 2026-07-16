@@ -7,6 +7,12 @@
 //! - **Bus Scanning**: Catalogs PCI/USB peripherals.
 //! - **Graceful Degradation**: Handles missing diagnostic tools (lshw/dmidecode) by providing fallback info.
 
+//-NOTE: Hardware Intelligence Module (/src/modules/hardware/mod.rs)
+//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+//-END
+
 use std::fs;
 use std::process::Command;
 use std::time::{SystemTime, UNIX_EPOCH};

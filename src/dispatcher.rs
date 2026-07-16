@@ -1,5 +1,10 @@
-//! # CYBERDECK Dispatcher
+//! # CYBERDECK Dispatcher (src/dispatcher.rs)
+//!
 //! The command execution engine for the CYBERDECK system.
+//! This module handles the interpretation and routing of system commands,
+//! managing state updates and asynchronous diagnostic/module execution.
+//!
+#![warn(missing_docs)]
 
 use crate::types::{SharedCyberdeckState, CyberdeckCommand};
 use std::time::{SystemTime, UNIX_EPOCH};
@@ -10,39 +15,67 @@ use crate::modules::{
     memory, motherboard, network, power, services, storage_ai, thermal_ai
 };
 
-/// Executes a given `CyberdeckCommand`.
+//-NOTE: Dispatcher [Execution Engine] (src/dispatcher.rs)
+//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+//-END
+
 pub async fn execute_cyberdeck_command(cmd: CyberdeckCommand, state: &SharedCyberdeckState) {
     let timestamp = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
 
     match cmd {
         CyberdeckCommand::InitDisplay => {
+            //-CODE: Init_Display
             let mut s = state.lock().await;
             s.display_active = true;
             s.execution_log.push(format!("[{}] Display system activated.", timestamp));
+            //-END
         }
+
         CyberdeckCommand::SetStealth(mode) => {
+            //-CODE: Set_Stealth_Mode
             let mut s = state.lock().await;
             s.stealth_mode = mode;
             s.execution_log.push(format!("[{}] Stealth configuration set to: {}", timestamp, mode));
+            //-END
         }
+        // Generate report
         CyberdeckCommand::GenerateReport => {
+            //-CODE: Generate_Report_Logic
             let mut s = state.lock().await;
             s.reports_generated += 1;
+            // Extract the value into a local variable first (this is an immutable copy)
             let current_report_num = s.reports_generated;
+            // Now pass that local variable to the formatter.
+            // s is now free to be borrowed mutably by log_event.
+
             s.execution_log.push(format!("[{}] System Report #{} generated.", timestamp, current_report_num));
+            //-END
         }
 
-        // --- NEW ARCHIVE LOGIC ---
+        //-NEW: NEW ARCHIVE LOGIC
+        //- Recently added features [compression]
+        //- Options: zip, gzip, tar, 7zip
+        //- Output Folder: /diagnostics (change dir in Execute system command below)
+        //-END
+
+        //-NOTE: Archive files in various formats; zip, tar, gzip, 7z.
+        //- Can now save diagnostic the output to a compressed folder
+        //-END
         CyberdeckCommand::ArchiveFiles(format) => {
+            //-CODE: Archive_Files
             let fmt = format.to_lowercase();
 
-            // 1. Ensure output directory exists
+            //-NOTE: Ensure output directory exists.
             if let Err(e) = std::fs::create_dir_all("output") {
+                //-END
                 tracing::error!("Failed to create output directory: {}", e);
                 return;
             }
+            //-END
 
-            // 2. Generate date-stamped filename
+            //-CODE: Generate_date-stamped_filename
             let now = chrono::Local::now();
             let date_str = now.format("%Y-%m-%d").to_string();
 
@@ -52,8 +85,9 @@ pub async fn execute_cyberdeck_command(cmd: CyberdeckCommand, state: &SharedCybe
 
             let mut s = state.lock().await;
             tracing::info!("Archiving to: {}", output_path);
+            //-END
 
-            // 3. Execute system command
+            //-NOTE: Execute system command.
             let result = match fmt.as_str() {
                 "zip" => Command::new("zip").args(["-r", &output_path, "./diagnostics"]).status(),
                 "tar" => Command::new("tar").args(["-cvf", &output_path, "./diagnostics"]).status(),
@@ -65,8 +99,9 @@ pub async fn execute_cyberdeck_command(cmd: CyberdeckCommand, state: &SharedCybe
                     return;
                 }
             };
+            //-END
 
-            // 4. Log results
+            //-NOTE: Log results
             match result {
                 Ok(status) if status.success() => {
                     tracing::info!("Archive successful: {}", filename);
@@ -77,9 +112,9 @@ pub async fn execute_cyberdeck_command(cmd: CyberdeckCommand, state: &SharedCybe
                     s.execution_log.push(format!("[{}] Critical: Compression failed.", timestamp));
                 }
             }
+            //-END
         }
 
-        // --- Consolidated Module Execution ---
         CyberdeckCommand::RunAudioModule(p) => run_module(state, &p, |params| {
             let params = params.to_string(); let state_arc = state.clone();
             async move { audio::execute(&*state_arc.lock().await, &params).await.map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e)) }
@@ -155,11 +190,11 @@ pub async fn execute_cyberdeck_command(cmd: CyberdeckCommand, state: &SharedCybe
             async move { thermal_ai::execute(&*state_arc.lock().await, &params).await.map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e)) }
         }).await,
 
+        // Print warning if not implemented
         _ => println!("Command not implemented"),
     }
 }
 
-/// Helper for standard module execution.
 async fn run_module<F, Fut>(state: &SharedCyberdeckState, p: &str, exec_fn: F)
 where F: Fn(&str) -> Fut, Fut: std::future::Future<Output = std::io::Result<String>> {
     match exec_fn(p).await {

@@ -1,4 +1,4 @@
-//! # Power & Performance Intelligence
+//! # CYBERDECK: Power & Performance Intelligence
 //!
 //! Monitors CPU scaling governors, P-State drivers, and system power states.
 //!
@@ -6,6 +6,12 @@
 //! - **CPU Mapping**: Single-pass traversal of `/sys/devices/system/cpu` for efficiency.
 //! - **Driver Detection**: Automatically differentiates between P-State and ACPI scaling drivers.
 //! - **Energy Aware**: Integrates with `upower` for battery and power source state.
+
+//-NOTE: Power & Performance Intelligence (/src/modules/power/mod.rs)
+//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+//-END
 
 use std::fs;
 use std::process::Command;

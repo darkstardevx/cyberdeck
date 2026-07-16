@@ -1,4 +1,12 @@
 //! # CYBERDECK: Battery & Power Diagnostics Module
+//!
+//! This module provides battery monitoring and reports.
+
+//-NOTE: Battery & Power Diagnostics Module (/src/modules/battery/mod.rs)
+//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+//-END
 
 use std::fs::{self, File};
 use std::io::Write; // Needed for the writeln! macro

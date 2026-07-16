@@ -3,21 +3,21 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Cyberdeck System Manual</title>
+        <title>CYBERDECK</title>
         <meta name="robots" content="noindex">
 
 
         <!-- Custom HTML head -->
 
-        <meta name="description" content="">
+        <meta name="description" content="System Documentation">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
         <link rel="icon" href="favicon-de23e50b.svg">
         <link rel="shortcut icon" href="favicon-8114d1fc.png">
         <link rel="stylesheet" href="css/variables-8adf115d.css">
-        <link rel="stylesheet" href="css/general-0392ca55.css">
-        <link rel="stylesheet" href="css/chrome-fc474251.css">
+        <link rel="stylesheet" href="css/general-e96d0476.css">
+        <link rel="stylesheet" href="css/chrome-d279d366.css">
         <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
 
         <!-- Fonts -->
@@ -29,6 +29,7 @@
         <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
 
         <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/book-5c9b8e5d.css">
 
 
         <!-- Provide site root and default themes to javascript -->
@@ -36,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-39bb2705.js";
+            window.path_to_searchindex_js = "searchindex-99ca5556.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-692cfe0d.js"></script>
+        <script src="toc-78e366b5.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -138,7 +139,7 @@
                         </button>
                     </div>
 
-                    <h1 class="menu-title">Cyberdeck System Manual</h1>
+                    <h1 class="menu-title">CYBERDECK</h1>
 
                     <div class="right-buttons">
                         <a href="print.html" title="Print this book" aria-label="Print this book">
@@ -177,33 +178,637 @@
                     <main>
                         <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
 <div style="break-before: page; page-break-before: always;"></div>
-<h1 id="environment-variables"><a class="header" href="#environment-variables">Environment Variables</a></h1>
-<p>This section tracks all global system flags used to configure the Cyberdeck application runtime environment at boot.</p>
-<h2 id="variable-reference-table"><a class="header" href="#variable-reference-table">Variable Reference Table</a></h2>
-<div class="table-wrapper">
-<table>
-<thead>
-<tr><th style="text-align: left">Variable Name</th><th style="text-align: left">Type</th><th style="text-align: left">Allowed / Example Values</th><th style="text-align: left">Description</th></tr>
-</thead>
-<tbody>
-<tr><td style="text-align: left"><code>CYBERDECK_ENV</code></td><td style="text-align: left">String (Script)</td><td style="text-align: left"><code>init_display; stealth_on; run_module hardware</code></td><td style="text-align: left">Master orchestration language script executed sequentially at boot sequence.</td></tr>
-<tr><td style="text-align: left"><code>CYBERDECK_PORT</code></td><td style="text-align: left">Integer</td><td style="text-align: left"><code>3000</code>, <code>8080</code></td><td style="text-align: left">Specifies the local TCP network port for the native runtime API layer.</td></tr>
-<tr><td style="text-align: left"><code>CYBERDECK_LOG_LEVEL</code></td><td style="text-align: left">String</td><td style="text-align: left"><code>info</code>, <code>debug</code>, <code>warn</code>, <code>error</code></td><td style="text-align: left">Configures verbosity filters for the host logging drivers.</td></tr>
-</tbody>
-</table>
-</div>
-<hr>
-<h2 id="language-script-syntax-cyberdeck_env"><a class="header" href="#language-script-syntax-cyberdeck_env">Language Script Syntax (<code>CYBERDECK_ENV</code>)</a></h2>
-<p>The <code>CYBERDECK_ENV</code> variable interprets a pipeline of semi-colon <code>;</code> separated string commands.</p>
-<h3 id="supported-opcode-tokens"><a class="header" href="#supported-opcode-tokens">Supported Opcode Tokens:</a></h3>
-<ul>
-<li><code>init_display</code>: Spreads runtime verification and mounts video buffers.</li>
-<li><code>stealth_on</code> / <code>stealth_off</code>: Sets kernel packet filtering profiles to silent parameters.</li>
-<li><code>run_module &lt;name&gt;</code>: Dispatches background worker routing loops. Valid names: <code>hardware</code>, <code>network</code>, <code>storage</code>.</li>
-<li><code>generate_report</code>: Compiles current tracking tables down to a persistent local Markdown sheet.</li>
-</ul>
+<h1 id="archive-files"><a href="#archive-files" class="header">Archive Files</a></h1>
+<h2 id="snippet-archive_files"><a class="header" href="#snippet-archive_files">Snippet: Archive_Files</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let fmt = format.to_lowercase();
+
+            //-NOTE: Ensure output directory exists.
+            if let Err(e) = std::fs::create_dir_all("output") {
+<span class="boring">}</span></code></pre>
 <div style="break-before: page; page-break-before: always;"></div>
+<h1 id="generate-date-stamped-filename"><a href="#generate-date-stamped-filename" class="header">Generate Date Stamped Filename</a></h1>
+<h2 id="snippet-generate_date-stamped_filename"><a class="header" href="#snippet-generate_date-stamped_filename">Snippet: Generate_date-stamped_filename</a></h2>
+<div class="warning">
+    **Warning:** Do not modify this file.
+</div>
+
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let now = chrono::Local::now();
+            let date_str = now.format("%Y-%m-%d").to_string();
+
+            let file_ext = if fmt == "gzip" { "tar.gz" } else { &amp;fmt };
+            let filename = format!("cyberdeck_archive_{}.{}", date_str, file_ext);
+            let output_path = format!("output/{}", filename);
+
+            let mut s = state.lock().await;
+            tracing::info!("Archiving to: {}", output_path);
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="generate-report-logic"><a href="#generate-report-logic" class="header">Generate Report Logic</a></h1>
+<h2 id="snippet-generate_report_logic"><a class="header" href="#snippet-generate_report_logic">Snippet: Generate_Report_Logic</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let mut s = state.lock().await;
+            s.reports_generated += 1;
+            // Extract the value into a local variable first (this is an immutable copy)
+            let current_report_num = s.reports_generated;
+            // Now pass that local variable to the formatter.
+            // s is now free to be borrowed mutably by log_event.
+
+            s.execution_log.push(format!("[{}] System Report #{} generated.", timestamp, current_report_num));
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="init-display"><a href="#init-display" class="header">Init Display</a></h1>
+<h2 id="snippet-init_display"><a class="header" href="#snippet-init_display">Snippet: Init_Display</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let mut s = state.lock().await;
+            s.display_active = true;
+            s.execution_log.push(format!("[{}] Display system activated.", timestamp));
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="set-stealth-mode"><a href="#set-stealth-mode" class="header">Set Stealth Mode</a></h1>
+<h2 id="snippet-set_stealth_mode"><a class="header" href="#snippet-set_stealth_mode">Snippet: Set_Stealth_Mode</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let mut s = state.lock().await;
+            s.stealth_mode = mode;
+            s.execution_log.push(format!("[{}] Stealth configuration set to: {}", timestamp, mode));
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="api-endpoint-to-receive-and-execute-a-command-via-the-dispatcher"><a href="#api-endpoint-to-receive-and-execute-a-command-via-the-dispatcher" class="header">Api Endpoint To Receive And Execute A Command Via The Dispatcher</a></h1>
+<h2 id="snippet-api-endpoint-to-receive-and-execute-a-command-via-the-dispatcher"><a class="header" href="#snippet-api-endpoint-to-receive-and-execute-a-command-via-the-dispatcher">Snippet: API endpoint to receive and execute a command via the dispatcher.</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="api-endpoint-to-retrieve-the-current-snapshot-of-the-cyberdeck-system-state"><a href="#api-endpoint-to-retrieve-the-current-snapshot-of-the-cyberdeck-system-state" class="header">Api Endpoint To Retrieve The Current Snapshot Of The Cyberdeck System State</a></h1>
+<h2 id="snippet-api-endpoint-to-retrieve-the-current-snapshot-of-the-cyberdeck-system-state"><a class="header" href="#snippet-api-endpoint-to-retrieve-the-current-snapshot-of-the-cyberdeck-system-state">Snippet: API endpoint to retrieve the current snapshot of the Cyberdeck system state.</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="archive-files-in-various-formats-zip-tar-gzip-7z"><a href="#archive-files-in-various-formats-zip-tar-gzip-7z" class="header">Archive Files In Various Formats Zip Tar Gzip 7z</a></h1>
+<h2 id="snippet-archive-files-in-various-formats-zip-tar-gzip-7z"><a class="header" href="#snippet-archive-files-in-various-formats-zip-tar-gzip-7z">Snippet: Archive files in various formats; zip, tar, gzip, 7z.</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>//- Can now save diagnostic the output to a compressed folder
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="audio-diagnostics-module-audio"><a href="#audio-diagnostics-module-audio" class="header">Audio Diagnostics Module Audio</a></h1>
+<h2 id="snippet-audio-diagnostics-module-srcmodulesaudiomodrs"><a class="header" href="#snippet-audio-diagnostics-module-srcmodulesaudiomodrs">Snippet: Audio Diagnostics Module (/src/modules/audio/mod.rs)</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="battery-power-diagnostics-module-battery"><a href="#battery-power-diagnostics-module-battery" class="header">Battery Power Diagnostics Module Battery</a></h1>
+<h2 id="snippet-battery--power-diagnostics-module-srcmodulesbatterymodrs"><a class="header" href="#snippet-battery--power-diagnostics-module-srcmodulesbatterymodrs">Snippet: Battery &amp; Power Diagnostics Module (/src/modules/battery/mod.rs)</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="bios-system-intelligence-module-bios"><a href="#bios-system-intelligence-module-bios" class="header">Bios System Intelligence Module Bios</a></h1>
+<h2 id="snippet-bios--system-intelligence-module-srcmodulesbiosmodrs"><a class="header" href="#snippet-bios--system-intelligence-module-srcmodulesbiosmodrs">Snippet: BIOS &amp; System Intelligence Module (/src/modules/bios/mod.rs)</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="cooling-thermal-diagnostic-module-fan"><a href="#cooling-thermal-diagnostic-module-fan" class="header">Cooling Thermal Diagnostic Module Fan</a></h1>
+<h2 id="snippet-cooling--thermal-diagnostic-module-srcmodulesfanmodrs"><a class="header" href="#snippet-cooling--thermal-diagnostic-module-srcmodulesfanmodrs">Snippet: Cooling &amp; Thermal Diagnostic Module (/src/modules/fan/mod.rs)</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="cpu-diagnostic-module-cpu"><a href="#cpu-diagnostic-module-cpu" class="header">Cpu Diagnostic Module Cpu</a></h1>
+<h2 id="snippet-cpu-diagnostic-module-srcmodulescpumodrs"><a class="header" href="#snippet-cpu-diagnostic-module-srcmodulescpumodrs">Snippet: CPU Diagnostic Module (/src/modules/cpu/mod.rs)</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="create-archive-of-diagnostic-files"><a href="#create-archive-of-diagnostic-files" class="header">Create Archive Of Diagnostic Files</a></h1>
+<h2 id="snippet-create-archive-of-diagnostic-files"><a class="header" href="#snippet-create-archive-of-diagnostic-files">Snippet: Create archive of diagnostic files.</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="cyberdeck-core-src-main-rs"><a href="#cyberdeck-core-src-main-rs" class="header">Cyberdeck Core Src Main Rs</a></h1>
+<h2 id="snippet-cyberdeck-core-srcmainrs"><a class="header" href="#snippet-cyberdeck-core-srcmainrs">Snippet: Cyberdeck Core (src/main.rs)</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="disk-diagnostics-module-disks"><a href="#disk-diagnostics-module-disks" class="header">Disk Diagnostics Module Disks</a></h1>
+<h2 id="snippet-disk-diagnostics-module-srcmodulesdisksmodrs"><a class="header" href="#snippet-disk-diagnostics-module-srcmodulesdisksmodrs">Snippet: Disk Diagnostics Module (/src/modules/disks/mod.rs)</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="dispatcher-execution-engine-src-dispatcher-rs"><a href="#dispatcher-execution-engine-src-dispatcher-rs" class="header">Dispatcher Execution Engine Src Dispatcher Rs</a></h1>
+<h2 id="snippet-dispatcher-execution-engine-srcdispatcherrs"><a class="header" href="#snippet-dispatcher-execution-engine-srcdispatcherrs">Snippet: Dispatcher [Execution Engine] (src/dispatcher.rs)</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="ensure-output-directory-exists"><a href="#ensure-output-directory-exists" class="header">Ensure Output Directory Exists</a></h1>
+<h2 id="snippet-ensure-output-directory-exists"><a class="header" href="#snippet-ensure-output-directory-exists">Snippet: Ensure output directory exists.</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>if let Err(e) = std::fs::create_dir_all("output") {
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="execute-system-command"><a href="#execute-system-command" class="header">Execute System Command</a></h1>
+<h2 id="snippet-execute-system-command"><a class="header" href="#snippet-execute-system-command">Snippet: Execute system command.</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let result = match fmt.as_str() {
+                "zip" =&gt; Command::new("zip").args(["-r", &amp;output_path, "./diagnostics"]).status(),
+                "tar" =&gt; Command::new("tar").args(["-cvf", &amp;output_path, "./diagnostics"]).status(),
+                "gzip" =&gt; Command::new("tar").args(["-czvf", &amp;output_path, "./diagnostics"]).status(),
+                "7z" =&gt; Command::new("7z").args(["a", &amp;output_path, "./diagnostics"]).status(),
+                _ =&gt; {
+                    tracing::error!("Unsupported format requested: {}", fmt);
+                    s.execution_log.push(format!("[{}] Error: Unsupported format '{}'", timestamp, fmt));
+                    return;
+                }
+            };
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="hardware-intelligence-module-hardware"><a href="#hardware-intelligence-module-hardware" class="header">Hardware Intelligence Module Hardware</a></h1>
+<h2 id="snippet-hardware-intelligence-module-srcmoduleshardwaremodrs"><a class="header" href="#snippet-hardware-intelligence-module-srcmoduleshardwaremodrs">Snippet: Hardware Intelligence Module (/src/modules/hardware/mod.rs)</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="live-dashboard-dashboard"><a href="#live-dashboard-dashboard" class="header">Live Dashboard Dashboard</a></h1>
+<h2 id="snippet-live-dashboard-srcmodulesdashboardmodrs"><a class="header" href="#snippet-live-dashboard-srcmodulesdashboardmodrs">Snippet: Live Dashboard (/src/modules/dashboard/mod.rs)</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="log-results"><a href="#log-results" class="header">Log Results</a></h1>
+<h2 id="snippet-log-results"><a class="header" href="#snippet-log-results">Snippet: Log results</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>match result {
+                Ok(status) if status.success() =&gt; {
+                    tracing::info!("Archive successful: {}", filename);
+                    s.execution_log.push(format!("[{}] Archive created: {}", timestamp, filename));
+                }
+                _ =&gt; {
+                    tracing::error!("Compression command failed.");
+                    s.execution_log.push(format!("[{}] Critical: Compression failed.", timestamp));
+                }
+            }
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="memory-intelligence-module-memory"><a href="#memory-intelligence-module-memory" class="header">Memory Intelligence Module Memory</a></h1>
+<h2 id="snippet-memory-intelligence-module-srcmodulesmemorymodrs"><a class="header" href="#snippet-memory-intelligence-module-srcmodulesmemorymodrs">Snippet: Memory Intelligence Module (/src/modules/memory/mod.rs)</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="motherboard-intelligence-motherboard"><a href="#motherboard-intelligence-motherboard" class="header">Motherboard Intelligence Motherboard</a></h1>
+<h2 id="snippet-motherboard-intelligence-srcmodulesmotherboardmodrs"><a class="header" href="#snippet-motherboard-intelligence-srcmodulesmotherboardmodrs">Snippet: Motherboard Intelligence (/src/modules/motherboard/mod.rs)</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="network-connectivity-intelligence-network"><a href="#network-connectivity-intelligence-network" class="header">Network Connectivity Intelligence Network</a></h1>
+<h2 id="snippet-network--connectivity-intelligence-srcmodulesnetworkmodrs"><a class="header" href="#snippet-network--connectivity-intelligence-srcmodulesnetworkmodrs">Snippet: Network &amp; Connectivity Intelligence (/src/modules/network/mod.rs)</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="orchestrator-mod-rs"><a href="#orchestrator-mod-rs" class="header">Orchestrator Mod Rs</a></h1>
+<h2 id="snippet-orchestrator-srcmodulesmodrs"><a class="header" href="#snippet-orchestrator-srcmodulesmodrs">Snippet: Orchestrator (/src/modules/mod.rs)</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>//- Modules: [11] (AI Included) + [2]
+//- Keep all notes current for module development purposes.
+//- Tag reference in build.rs
+//- New "tags" can be added at any time to [build.rs]. Document all new tags.
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="power-performance-intelligence-power"><a href="#power-performance-intelligence-power" class="header">Power Performance Intelligence Power</a></h1>
+<h2 id="snippet-power--performance-intelligence-srcmodulespowermodrs"><a class="header" href="#snippet-power--performance-intelligence-srcmodulespowermodrs">Snippet: Power &amp; Performance Intelligence (/src/modules/power/mod.rs)</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="primary-entry-point-src-main-rs"><a href="#primary-entry-point-src-main-rs" class="header">Primary Entry Point Src Main Rs</a></h1>
+<h2 id="snippet-primary-entry-point-srcmainrs"><a class="header" href="#snippet-primary-entry-point-srcmainrs">Snippet: Primary entry point. (src/main.rs)</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="routes-src-routes-rs"><a href="#routes-src-routes-rs" class="header">Routes Src Routes Rs</a></h1>
+<h2 id="snippet-routes-srcroutesrs"><a class="header" href="#snippet-routes-srcroutesrs">Snippet: Routes (src/routes.rs)</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="scans-the-5-theme-sub-folders"><a href="#scans-the-5-theme-sub-folders" class="header">Scans The 5 Theme Sub Folders</a></h1>
+<h2 id="snippet-scans-the-5-theme-sub-folders"><a class="header" href="#snippet-scans-the-5-theme-sub-folders">Snippet: Scans the 5 theme sub-folders.</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="service-intelligence-module-services"><a href="#service-intelligence-module-services" class="header">Service Intelligence Module Services</a></h1>
+<h2 id="snippet-service-intelligence-module-srcmodulesservicesmodrs"><a class="header" href="#snippet-service-intelligence-module-srcmodulesservicesmodrs">Snippet: Service Intelligence Module (/src/modules/services/mod.rs)</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="storage-intelligence-ai-mode-storage-ai"><a href="#storage-intelligence-ai-mode-storage-ai" class="header">Storage Intelligence Ai Mode Storage Ai</a></h1>
+<h2 id="snippet-storage-intelligence-ai-mode-srcmodulesstorage_aimodrs"><a class="header" href="#snippet-storage-intelligence-ai-mode-srcmodulesstorage_aimodrs">Snippet: Storage Intelligence (AI Mode) (/src/modules/storage_ai/mod.rs)</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="style-registry-style-engine-registry-rs"><a href="#style-registry-style-engine-registry-rs" class="header">Style Registry Style Engine Registry Rs</a></h1>
+<h2 id="snippet-style-registry-srcmodulesstyle_engineregistryrs"><a class="header" href="#snippet-style-registry-srcmodulesstyle_engineregistryrs">Snippet: Style Registry (/src/modules/style_engine/registry.rs)</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="thermal-intelligence-ai-mode-thermal-ai"><a href="#thermal-intelligence-ai-mode-thermal-ai" class="header">Thermal Intelligence Ai Mode Thermal Ai</a></h1>
+<h2 id="snippet-thermal-intelligence-ai-mode-srcmodulesthermal_aimodrs"><a class="header" href="#snippet-thermal-intelligence-ai-mode-srcmodulesthermal_aimodrs">Snippet: Thermal Intelligence (AI Mode) (/src/modules/thermal_ai/mod.rs)</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="utils-utils-rs"><a href="#utils-utils-rs" class="header">Utils Utils Rs</a></h1>
+<h2 id="snippet-utils-srcmodulesutilsrs"><a class="header" href="#snippet-utils-srcmodulesutilsrs">Snippet: Utils (/src/modules/utils.rs)</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>//- Keep all notes current for utils development purposes.
+//- Tag reference in build.rs
+//- New "tags" can be added at any time to [build.rs]. Document all new tags.
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="port-ip-127-0-0-1-8080-src-main-rs"><a href="#port-ip-127-0-0-1-8080-src-main-rs" class="header">Port Ip 127 0 0 1 8080 Src Main Rs</a></h1>
+<h2 id="snippet-port_ip-1270018080-srcmainrs"><a class="header" href="#snippet-port_ip-1270018080-srcmainrs">Snippet: Port_IP [127.0.0.1:8080] (src/main.rs)</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let port = std::env::var("CYBERDECK_PORT").unwrap_or_else(|_| "8080".to_string());
+    let listener = tokio::net::TcpListener::bind(format!("127.0.0.1:{}", port)).await.unwrap();
+
+    println!("[Cyberdeck Core] API active on http://127.0.0.1:{}", port);
+    axum::serve(listener, app).await.unwrap();
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="main-routes-src-main-rs"><a href="#main-routes-src-main-rs" class="header">Main Routes Src Main Rs</a></h1>
+<h2 id="snippet-main_routes-srcmainrs"><a class="header" href="#snippet-main_routes-srcmainrs">Snippet: Main_Routes (src/main.rs)</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let app = Router::new()
+    .route("/api/themes", get(routes::get_themes_list))
+    .route("/", get(routes::get_index_page))
+    // Updated paths to /cyberdeck/api/
+    .route("/cyberdeck/api/state", get(routes::get_cyberdeck_state))
+    .route("/cyberdeck/api/command", post(routes::post_cyberdeck_command))
+    .route("/cyberdeck/api/action", post(routes::post_cyberdeck_action)) // Add this for the new popup
+    .route("/cyberdeck/api/list", get(routes::list_diagnostics))
+    .fallback_service(ServeDir::new("static"))
+    .with_state(state);
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="tls-requirements"><a href="#tls-requirements" class="header">Tls Requirements</a></h1>
+<h2 id="snippet-tls_requirements"><a class="header" href="#snippet-tls_requirements">Snippet: TLS_Requirements</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>//- Ensure all outgoing packets are encrypted with AES-256.
+//- We are currently using plaintext for testing;
+//- MUST replace before production push.
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="database-optimization"><a href="#database-optimization" class="header">Database Optimization</a></h1>
+<h2 id="snippet-database_optimization"><a class="header" href="#snippet-database_optimization">Snippet: Database_Optimization</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>//- Move the connection pool initialization to the startup
+//- routine instead of lazy loading it.
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="new-archive-logic"><a href="#new-archive-logic" class="header">New Archive Logic</a></h1>
+<h2 id="snippet-new-archive-logic"><a class="header" href="#snippet-new-archive-logic">Snippet: NEW ARCHIVE LOGIC</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>//- Recently added features [compression]
+        //- Options: zip, gzip, tar, 7zip
+        //- Output Folder: /diagnostics (change dir in Execute system command below)
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="api-specs"><a href="#api-specs" class="header">Api Specs</a></h1>
+<h2 id="snippet-api_specs"><a class="header" href="#snippet-api_specs">Snippet: API_Specs</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>//- https://docs.cyberdeck-internal.io/v1/network-protocol
+//- Refer to page 4 for the handshake sequence details.
+<span class="boring">}</span></code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="module-memory-diagnostics"><a class="header" href="#module-memory-diagnostics">Module: Memory Diagnostics</a></h1>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<p>The Memory Diagnostics module (<code>memory::execute</code>) provides real-time introspection into system RAM. It captures both physical hardware details and OS-level memory management statistics.</p>
+<h2 id="artifacts-generated"><a class="header" href="#artifacts-generated">Artifacts Generated</a></h2>
+<ul>
+<li><code>memory.md</code>: The primary dashboard report.</li>
+<li><code>dimm/dimm_raw.md</code>: Physical DIMM information via <code>dmidecode</code>.</li>
+<li><code>usage/usage.md</code>: Current RAM/Swap utilization status.</li>
+<li><code>topology/topology.md</code>: CPU/Memory topology mapping.</li>
+<li><code>raw/raw.md</code>: Comprehensive system memory dumps.</li>
+</ul>
+<h2 id="external-dependencies"><a class="header" href="#external-dependencies">External Dependencies</a></h2>
+<ul>
+<li><code>dmidecode</code>: Required for physical memory slot identification.</li>
+<li><code>free</code>, <code>vmstat</code>, <code>swapon</code>: Standard Linux procps-ng utilities.</li>
+<li><code>lspci</code>, <code>lsusb</code>: Used for peripheral bus mapping.</li>
+</ul>
+<h2 id="api-signature"><a class="header" href="#api-signature">API Signature</a></h2>
+<pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub async fn execute(dir: &amp;str) -&gt; std::io::Result&lt;String&gt;
+<span class="boring">}</span></code></pre>
+<p>Arguments: dir (string) - The base directory to initialize the diagnostic tree.</p>
+<p>Returns: Result containing the path to the primary memory.md file on success.</p>
+<hr>
+<h3 id="module-battery--power-diagnostics"><a class="header" href="#module-battery--power-diagnostics">Module: Battery &amp; Power Diagnostics</a></h3>
+<ul>
+<li><strong>Path</strong>: <code>src/modules/battery/mod.rs</code></li>
+<li><strong>Function</strong>: <code>pub async fn execute(dir: &amp;str) -&gt; std::io::Result&lt;String&gt;</code></li>
+<li><strong>Description</strong>: Inspects hardware power controllers. Dynamically detects AC adapters and batteries (BATx).</li>
+<li><strong>Data Points</strong>:
+<ul>
+<li><code>capacity</code> (Percentage)</li>
+<li><code>power_now</code> (Current instantaneous power draw, critical for AMD/Intel/NVIDIA telemetry)</li>
+<li><code>energy_now</code> (Current energy state)</li>
+<li><code>voltage_now</code> (System voltage)</li>
+</ul>
+</li>
+<li><strong>Dependencies</strong>: Linux <code>sysfs</code> (Root privileges may be required to see some specific <code>hwmon</code> paths, but standard <code>power_supply</code> nodes are generally user-readable).</li>
+</ul>
+<hr>
+<h3 id="module-bios--system-intelligence"><a class="header" href="#module-bios--system-intelligence">Module: BIOS &amp; System Intelligence</a></h3>
+<ul>
+<li><strong>Path</strong>: <code>src/modules/bios/mod.rs</code></li>
+<li><strong>Function</strong>: <code>pub async fn execute(dir: &amp;str) -&gt; std::io::Result&lt;String&gt;</code></li>
+<li><strong>Description</strong>: Performs high-level hardware enumeration. This module acts as the “Master Diagnostics” suite, probing deep kernel parameters, firmware tables, and active CPU power management state.</li>
+<li><strong>Artifacts Generated</strong>:
+<ul>
+<li><code>bios.md</code>: Main aggregate dashboard.</li>
+<li><code>cpu/cpu.md</code>: Processor architecture and scaling.</li>
+<li><code>motherboard/bios.md</code>: Firmware information.</li>
+<li><code>power/power.md</code>: Frequency scaling, governors, and driver state.</li>
+</ul>
+</li>
+<li><strong>External Dependencies</strong>:
+<ul>
+<li><code>dmidecode</code>: Requires elevated privileges (<code>sudo</code> wrapper context).</li>
+<li><code>lscpu</code>, <code>lspci</code>, <code>free</code>: Standard Linux utility suite.</li>
+<li><code>cpupower</code>: Optional, for deep CPU frequency state introspection.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="module-cpu-diagnostic"><a class="header" href="#module-cpu-diagnostic">Module: CPU Diagnostic</a></h3>
+<ul>
+<li><strong>Path</strong>: <code>src/modules/cpu/mod.rs</code></li>
+<li><strong>Function</strong>: <code>pub async fn execute(dir: &amp;str) -&gt; std::io::Result&lt;String&gt;</code></li>
+<li><strong>Description</strong>: High-fidelity CPU telemetry. Maps core topology, monitors package temperatures via <code>hwmon</code>, and tracks power state via <code>powercap</code> (RAPL).</li>
+<li><strong>Key Metrics</strong>:
+<ul>
+<li><code>scaling_governor</code>: Identify if CPU is in <code>powersave</code> vs <code>performance</code> mode.</li>
+<li><code>temp_input</code>: Hardware-level thermal probe data.</li>
+<li><code>energy_uj</code>: Real-time energy consumption (RAPL).</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="module-disk-diagnostics"><a class="header" href="#module-disk-diagnostics">Module: Disk Diagnostics</a></h3>
+<ul>
+<li><strong>Path</strong>: <code>src/modules/disks/mod.rs</code></li>
+<li><strong>Function</strong>: <code>pub async fn execute(dir: &amp;str) -&gt; std::io::Result&lt;String&gt;</code></li>
+<li><strong>Description</strong>: Probes physical block devices for health, geometry, and mount status.</li>
+<li><strong>Advanced Features</strong>:
+<ul>
+<li><strong>Btrfs Integration</strong>: Automatically detects Btrfs filesystems to report subvolume lists and true space usage.</li>
+<li><strong>S.M.A.R.T. Audit</strong>: Performs hardware health checks on all block devices.</li>
+</ul>
+</li>
+<li><strong>Dependencies</strong>: <code>lsblk</code> (standard), <code>smartctl</code> (smartmontools), <code>btrfs-progs</code> (for Btrfs features).</li>
+</ul>
+<hr>
+<h3 id="module-network-intelligence"><a class="header" href="#module-network-intelligence">Module: Network Intelligence</a></h3>
+<ul>
+<li><strong>Path</strong>: <code>src/modules/network/mod.rs</code></li>
+<li><strong>Function</strong>: <code>pub async fn execute(dir: &amp;str) -&gt; std::io::Result&lt;String&gt;</code></li>
+<li><strong>Description</strong>: Centralized network stack monitoring.</li>
+<li><strong>Key Capabilities</strong>:
+<ul>
+<li><strong>Interface Diagnostics</strong>: Maps all active NICs, their operational state, and link speeds.</li>
+<li><strong>Driver Conflict Auditing</strong>: Automatically parses <code>lsmod</code> to detect Realtek driver collisions (r8125 vs r8169).</li>
+<li><strong>Network Visibility</strong>: Maps routing tables, active sockets (<code>ss</code>), and DNS resolver status.</li>
+<li><strong>Hardware Mapping</strong>: Links software interfaces to physical bus/drivers.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="module-cooling--thermal-diagnostic"><a class="header" href="#module-cooling--thermal-diagnostic">Module: Cooling &amp; Thermal Diagnostic</a></h3>
+<ul>
+<li><strong>Path</strong>: <code>src/modules/fan/mod.rs</code></li>
+<li><strong>Function</strong>: <code>pub async fn execute(dir: &amp;str) -&gt; std::io::Result&lt;String&gt;</code></li>
+<li><strong>Description</strong>: Real-time cooling telemetry and thermal zone monitoring.</li>
+<li><strong>Key Capabilities</strong>:
+<ul>
+<li><strong>Thermal Zone Tracking</strong>: Maps all system thermal zones to current temperatures.</li>
+<li><strong>Fan/PWM Matrix</strong>: Correlates fan RPM with PWM duty cycle percentage, providing a complete view of cooling performance.</li>
+<li><strong>PWM Control Mode Detection</strong>: Identifies whether fans are running in <code>Manual</code> or <code>Automatic</code> modes, allowing for rapid debugging of thermal throttling or fan control conflicts.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="module-hardware-intelligence"><a class="header" href="#module-hardware-intelligence">Module: Hardware Intelligence</a></h3>
+<ul>
+<li><strong>Path</strong>: <code>src/modules/hardware/mod.rs</code></li>
+<li><strong>Function</strong>: <code>pub async fn execute(dir: &amp;str) -&gt; std::io::Result&lt;String&gt;</code></li>
+<li><strong>Description</strong>: Comprehensive physical system inventory and bus topology audit.</li>
+<li><strong>Key Capabilities</strong>:
+<ul>
+<li><strong>System Board Audit</strong>: Extracts manufacturer, model, serial, and BIOS versions via DMI decoding.</li>
+<li><strong>Peripheral Topology</strong>: Maps all PCI and USB devices currently connected to the system.</li>
+<li><strong>Capability Reporting</strong>: Summarizes system-wide hardware components, including architecture, cores, and bus-level details.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="module-memory-intelligence"><a class="header" href="#module-memory-intelligence">Module: Memory Intelligence</a></h3>
+<ul>
+<li><strong>Path</strong>: <code>src/modules/memory/mod.rs</code></li>
+<li><strong>Function</strong>: <code>pub async fn execute(dir: &amp;str) -&gt; std::io::Result&lt;String&gt;</code></li>
+<li><strong>Description</strong>: High-fidelity memory diagnostics and OS-level tuning oversight.</li>
+<li><strong>Key Capabilities</strong>:
+<ul>
+<li><strong>Physical Inventory</strong>: Automatically identifies DDR generation, module speed, and manufacturer via DMI decoding.</li>
+<li><strong>Swap/Pressure Monitoring</strong>: Real-time tracking of swap usage and OS-level “swappiness” configurations.</li>
+<li><strong>Tuning Oversight</strong>: Monitors system performance profiles (<code>tuned</code>) to ensure memory latency is optimized for the workload.</li>
+<li><strong>Topology</strong>: Maps NUMA node structures for multi-socket or high-performance memory configurations.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="module-power--performance-intelligence"><a class="header" href="#module-power--performance-intelligence">Module: Power &amp; Performance Intelligence</a></h3>
+<ul>
+<li><strong>Path</strong>: <code>src/modules/power/mod.rs</code></li>
+<li><strong>Function</strong>: <code>pub async fn execute(dir: &amp;str) -&gt; std::io::Result&lt;String&gt;</code></li>
+<li><strong>Description</strong>: Monitors system CPU scaling, power governors, and battery/AC status.</li>
+<li><strong>Key Capabilities</strong>:
+<ul>
+<li><strong>Single-Pass Topology</strong>: Efficiently maps all CPU cores, their active governor, and current frequency in one read pass.</li>
+<li><strong>Driver Auditing</strong>: Detects active CPU scaling drivers (<code>amd_pstate</code>, <code>intel_pstate</code>, <code>acpi</code>) for thermal/power debugging.</li>
+<li><strong>Energy Reporting</strong>: Automatically hooks into <code>upower</code> to report current charge, battery health, or power source (AC/DC).</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="module-motherboard-intelligence"><a class="header" href="#module-motherboard-intelligence">Module: Motherboard Intelligence</a></h3>
+<ul>
+<li><strong>Path</strong>: <code>src/modules/motherboard/mod.rs</code></li>
+<li><strong>Function</strong>: <code>pub async fn execute(dir: &amp;str) -&gt; std::io::Result&lt;String&gt;</code></li>
+<li><strong>Description</strong>: Extracts deep-level hardware identity and UEFI/BIOS configuration.</li>
+<li><strong>Key Capabilities</strong>:
+<ul>
+<li><strong>SMBIOS/DMI Auditing</strong>: Pulls manufacturer, product model, and serial number directly from the hardware controller.</li>
+<li><strong>Identity Summarization</strong>: Parses raw DMI output into a human-readable “Quick Identity” header.</li>
+<li><strong>Permissions Handling</strong>: Gracefully handles non-root execution environments to prevent log pollution.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="module-storage-intelligence-ai"><a class="header" href="#module-storage-intelligence-ai">Module: Storage Intelligence (AI)</a></h3>
+<ul>
+<li><strong>Path</strong>: <code>src/modules/storage_ai/mod.rs</code></li>
+<li><strong>Function</strong>: <code>pub async fn execute(dir: &amp;str) -&gt; std::io::Result&lt;String&gt;</code></li>
+<li><strong>Description</strong>: High-fidelity storage diagnostic suite for the CYBERDECK project, including LUKS encryption auditing and SMART health predictions.</li>
+<li><strong>Key Capabilities</strong>:
+<ul>
+<li><strong>Block Topology</strong>: Maps physical disks to filesystems and mount points.</li>
+<li><strong>Predictive Health</strong>: Parses hardware SMART registers to identify drive degradation.</li>
+<li><strong>Encryption Visibility</strong>: Identifies active LUKS/Mapper devices for security compliance.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="module-thermal-intelligence"><a class="header" href="#module-thermal-intelligence">Module: Thermal Intelligence</a></h3>
+<ul>
+<li><strong>Path</strong>: <code>src/modules/thermal_ai/mod.rs</code></li>
+<li><strong>Function</strong>: <code>pub async fn execute(dir: &amp;str) -&gt; std::io::Result&lt;String&gt;</code></li>
+<li><strong>Description</strong>: Monitors system temperatures through kernel sysfs and hardware-level sensor tools.</li>
+<li><strong>Key Capabilities</strong>:
+<ul>
+<li><strong>Thermal Topology</strong>: Automatically maps thermal zones from the kernel.</li>
+<li><strong>Heuristic Fallback</strong>: Intelligent fallback to <code>lm-sensors</code> if the system provides no standard sysfs nodes.</li>
+<li><strong>Telemetry Parsing</strong>: Separates raw heat logs from parsed peak-temperature summaries.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="module-service-intelligence"><a class="header" href="#module-service-intelligence">Module: Service Intelligence</a></h3>
+<ul>
+<li><strong>Path</strong>: <code>src/modules/services/mod.rs</code></li>
+<li><strong>Function</strong>: <code>pub async fn execute(dir: &amp;str) -&gt; std::io::Result&lt;String&gt;</code></li>
+<li><strong>Description</strong>: Monitors and categorizes systemd services for CYBERDECK operational readiness.</li>
+<li><strong>Key Capabilities</strong>:
+<ul>
+<li><strong>Heuristic Classification</strong>: Automatically tags services as Web, DB, Infrastructure, or Security based on naming patterns.</li>
+<li><strong>Operational Snapshot</strong>: Maps running units into a clean Markdown table for quick auditing.</li>
+<li><strong>Graceful Failure</strong>: Handles non-systemd environments without crashing the diagnostic sequence.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="module-live-dashboard"><a class="header" href="#module-live-dashboard">Module: Live Dashboard</a></h3>
+<ul>
+<li><strong>Path</strong>: <code>src/modules/dashboard/mod.rs</code></li>
+<li><strong>Function</strong>: <code>pub async fn execute(dir: &amp;str) -&gt; std::io::Result&lt;String&gt;</code></li>
+<li><strong>Description</strong>: The visual interface for the CYBERDECK system.</li>
+<li><strong>Key Capabilities</strong>:
+<ul>
+<li><strong>Synchronous Output</strong>: Prints real-time system state to the console for live monitoring.</li>
+<li><strong>Persistent Logging</strong>: Writes a snapshot of the dashboard state to a markdown file, ensuring it is included in the Orchestrator’s final report.</li>
+</ul>
+</li>
+</ul>
+<hr><div style="break-before: page; page-break-before: always;"></div>
 <h1 id="local-api-specifications"><a class="header" href="#local-api-specifications">Local API Specifications</a></h1>
+<div class="note">
+    **Note:** This is the core API.
+</div>
+
 <p>The Cyberdeck exposes a high-performance local network interface on <code>127.0.0.1:4400</code> to manipulate states or append commands mid-lifecycle.</p>
 <h2 id="1-fetch-system-diagnostics"><a class="header" href="#1-fetch-system-diagnostics">1. Fetch System Diagnostics</a></h2>
 <p>Returns a complete serialization snapshot of the hardware configurations, running modules, and execution sequence histories.</p>
@@ -224,6 +829,44 @@
   ]
 }
 </code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="env-vars"><a href="#env-vars" class="header">ENV VARS</a></h1>
+<h3 id="updated-system-environment-variable-registry"><a class="header" href="#updated-system-environment-variable-registry">Updated System Environment Variable Registry</a></h3>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th><strong>Variable Name</strong></th><th><strong>Type</strong></th><th><strong>Example Value</strong></th><th><strong>Target System Block</strong></th></tr>
+</thead>
+<tbody>
+<tr><td><code>CYBERDECK_ENV</code></td><td>String (Script)</td><td><code>init_display; run_module network</code></td><td>Initialization Language Engine</td></tr>
+<tr><td><code>CYBERDECK_PORT</code></td><td>Integer</td><td><code>3000</code></td><td>Local Network API Router</td></tr>
+<tr><td><code>CYBERDECK_API_BIND</code></td><td>String (IP)</td><td><code>127.0.0.1</code></td><td>Network Interface Exposure</td></tr>
+<tr><td><code>CYBERDECK_SECRET_KEY</code></td><td>String (Crypto)</td><td><code>df83j28f0s...</code></td><td>API Access Authentication</td></tr>
+<tr><td><code>CYBERDECK_LOG_LEVEL</code></td><td>String</td><td><code>info</code></td><td>Rust Internal Tracing Driver</td></tr>
+<tr><td><code>CYBERDECK_CPU_GOVERNOR</code></td><td>String</td><td><code>performance</code></td><td>Low-level Hardware Scaling</td></tr>
+<tr><td><code>CYBERDECK_DISPLAY_BACKEND</code></td><td>String</td><td><code>wayland</code></td><td>Core UI Window Manager</td></tr>
+<tr><td><code>CYBERDECK_NET_INTERFACE</code></td><td>String</td><td><code>wlan0</code></td><td>Diagnostics Hardware Layer</td></tr>
+<tr><td><code>CYBERDECK_DNS_OVERRIDE</code></td><td>String (IP)</td><td><code>1.1.1.1</code></td><td>Custom Resolver Core</td></tr>
+<tr><td><code>CYBERDECK_STORAGE_ROOT</code></td><td>String (Path)</td><td><code>/var/lib/cyberdeck/</code></td><td>Persistent Database Engine</td></tr>
+<tr><td><code>CYBERDECK_TMP_CHROOT</code></td><td>String (Path)</td><td><code>/tmp/cyberdeck_sb/</code></td><td>Module Sandbox Subshell Isolation</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="operations--api-interaction"><a class="header" href="#operations--api-interaction">Operations &amp; API Interaction</a></h2>
+<h3 id="testing-native-module-startup"><a class="header" href="#testing-native-module-startup">Testing Native Module Startup</a></h3>
+<p>To pass script loops that explicitly invoke specific system routing modules through the environment string:</p>
+<p>Bash</p>
+<pre><code>Cyberdeck_ENV="init_display; stealth_on; run_module hardware; run_module storage; generate_report" cargo run
+</code></pre>
+<h3 id="dynamic-module-routing-over-api"><a class="header" href="#dynamic-module-routing-over-api">Dynamic Module Routing over API</a></h3>
+<p>While the core program is listening, you can bypass manual shell triggers and spin up additional system checking modules directly via runtime injections:</p>
+<p>Bash</p>
+<pre><code>curl -X POST http://127.0.0.1:3000/api/cyberdeck/command \
+  -H "Content-Type: application/json" \
+  -d '{"type": "RunModule", "args": "NetworkDiagnostics"}'
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="introduction-1"><a class="header" href="#introduction-1">Introduction</a></h1>
 
                     </main>
 
@@ -277,7 +920,7 @@
 
         <script src="clipboard-1626706a.min.js"></script>
         <script src="highlight-abc7f01d.js"></script>
-        <script src="book-c22b7243.js"></script>
+        <script src="book-609e4cb8.js"></script>
 
         <!-- Custom JS scripts -->
 

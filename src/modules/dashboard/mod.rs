@@ -7,6 +7,13 @@
 //! - **Signature**: Matches the `execute(state, params)` project standard.
 //! - **Dual-Output**: Prints live status to stdout and saves diagnostic state to dashboard.md.
 
+//-NOTE: Live Dashboard (/src/modules/dashboard/mod.rs)
+//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+//-END
+
+
 use std::fs;
 use std::process::Command;
 use crate::types::CyberdeckState;

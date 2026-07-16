@@ -1,0 +1,14 @@
+{
+  "name": "Neosynth_Viper_Outrun",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "neon",
+  "background": "#040907",
+  "foreground": "#39ff14",
+  "cursor": "#ff0055",
+  "colors": [
+    "#020403", "#0a1711", "#142d22", "#204635",
+    "#2e624b", "#3f8264", "#173528", "#0d2018",
+    "#39ff14", "#ff0055", "#00e5ff", "#e1ff00",
+    "#00ff88", "#ff00aa", "#17b890", "#ffffff"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Cyberpunk_Proxy_Leak",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "hacker",
+  "background": "#02070a",
+  "foreground": "#00f0ff",
+  "cursor": "#0088ff",
+  "colors": [
+    "#010305", "#06131c", "#0d2434", "#16384e",
+    "#204d6b", "#2c678c", "#112e42", "#081b28",
+    "#00f0ff", "#0088ff", "#0055ff", "#00a8ff",
+    "#55ffff", "#99f0ff", "#051119", "#ffffff"
+  ]
+}

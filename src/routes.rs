@@ -3,8 +3,14 @@
 //! The HTTP interface for the CYBERDECK system.
 //! This module maps API endpoints and web UI requests to the underlying command dispatcher
 //! and system state management.
-
+//!
 #![warn(missing_docs)]
+
+//-NOTE: Routes (src/routes.rs)
+//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+//-END
 
 use axum::{
     extract::State,
@@ -17,10 +23,6 @@ use crate::dispatcher;
 
 use serde::{Deserialize};
 
-/// Renders the primary HTML index page.
-///
-/// Injects the current system state, including display status, stealth mode,
-/// report counts, and the execution log, into the ui.html template.
 pub async fn get_index_page(State(state): State<SharedCyberdeckState>) -> Html<String> {
     let s = state.lock().await;
     let template = include_str!("../static/ui.html");
@@ -36,13 +38,16 @@ pub async fn get_index_page(State(state): State<SharedCyberdeckState>) -> Html<S
     .into()
 }
 
-/// API endpoint to retrieve the current snapshot of the Cyberdeck system state.
+//-NOTE: API endpoint to retrieve the current snapshot of the Cyberdeck system state.
+//-END
+
 pub async fn get_cyberdeck_state(State(state): State<SharedCyberdeckState>) -> Json<crate::types::CyberdeckState> {
     let s = state.lock().await;
     Json(s.clone())
 }
 
-/// API endpoint to receive and execute a command via the dispatcher.
+//-NOTE: API endpoint to receive and execute a command via the dispatcher.
+//-END
 pub async fn post_cyberdeck_command(State(state): State<SharedCyberdeckState>, Json(cmd): Json<CyberdeckCommand>) -> Json<String> {
     dispatcher::execute_cyberdeck_command(cmd, &state).await;
     Json("Instruction pipeline advanced successfully.".to_string())
@@ -51,11 +56,12 @@ pub async fn post_cyberdeck_command(State(state): State<SharedCyberdeckState>, J
 use serde_json::json;
 use std::fs;
 
+//-NOTE: Scans the 5 theme sub-folders.
+//-END
 pub async fn get_themes_list() -> impl IntoResponse {
     let mut themes = json!({});
     let base_path = "static/themes/sub-cyber";
 
-    // Scan the 6 sub-folders
     if let Ok(folders) = fs::read_dir(base_path) {
         for folder in folders.filter_map(|f| f.ok()) {
             if folder.path().is_dir() {
@@ -94,6 +100,8 @@ pub struct DeckAction {
     pub action: String,
 }
 
+//-NOTE: Create archive of diagnostic files.
+//-END
 pub async fn post_cyberdeck_action(Json(payload): Json<DeckAction>) -> Json<String> {
     println!("DEBUG: Action received: {}", payload.action);
 

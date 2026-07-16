@@ -8,6 +8,13 @@
 //! - **S.M.A.R.T.**: Probes hardware health via `smartctl`. (Requires root/sudo privileges).
 //! - **Mountpoints**: Automatically maps and tracks `/media` and `/run/media` for external drive visibility.
 
+//-NOTE: Disk Diagnostics Module (/src/modules/disks/mod.rs)
+//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+//-END
+
+
 use std::fs::{self, OpenOptions};
 use std::process::Command;
 use std::io::Write;

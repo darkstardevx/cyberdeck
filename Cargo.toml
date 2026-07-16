@@ -13,7 +13,13 @@ chrono = "0.4"
 clap = { version = "4.0", features = ["derive"] }
 tower-http = { version = "0.5", features = ["fs"] }
 open = "5.4.0"
-
-# Enable logging
 tracing = "0.1"
 tracing-subscriber = "0.3"
+
+[build-dependencies]
+# These will allow the script to scan the files and parse the text
+regex = "1.10"
+walkdir = "2.5"
+
+# Enable logging
+dirs = "6.0.0"

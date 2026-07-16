@@ -7,6 +7,12 @@
 //! - **Pluggable**: New loaders can be added by implementing the `StyleLoader` trait.
 //! - **Documentation**: Includes automated `generate_docs` to keep `docs/STYLE_REFERENCE.md` in sync.
 
+//-NOTE: Style Registry (/src/modules/style_engine/registry.rs)
+//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+//-END
+
 use crate::style_api;
 use std::collections::HashMap;
 

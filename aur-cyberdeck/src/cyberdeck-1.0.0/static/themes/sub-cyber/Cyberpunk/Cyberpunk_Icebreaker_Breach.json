@@ -1,0 +1,14 @@
+{
+  "name": "Cyberpunk_Icebreaker_Breach",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "hacker",
+  "background": "#0b0404",
+  "foreground": "#ff0055",
+  "cursor": "#ff3300",
+  "colors": [
+    "#050202", "#1a0909", "#301212", "#4a1b1b",
+    "#672626", "#873232", "#3d1616", "#240d0d",
+    "#ff0055", "#ff3300", "#b2003b", "#ff6600",
+    "#ff5588", "#ff99bb", "#140707", "#ffffff"
+  ]
+}

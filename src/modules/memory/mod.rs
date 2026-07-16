@@ -3,6 +3,12 @@
 //! Provides deep-dive metrics on physical RAM status, swap health,
 //! and NUMA topology. Ready for DDR5+ reporting.
 
+//-NOTE: Memory Intelligence Module (/src/modules/memory/mod.rs)
+//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+//-END
+
 use std::fs;
 use std::process::Command;
 use std::time::{SystemTime, UNIX_EPOCH};

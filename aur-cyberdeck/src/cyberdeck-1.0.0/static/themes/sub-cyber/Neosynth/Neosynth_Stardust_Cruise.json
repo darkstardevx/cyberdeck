@@ -1,0 +1,14 @@
+{
+  "name": "Neosynth_Stardust_Cruise",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "neon",
+  "background": "#05040e",
+  "foreground": "#00bfff",
+  "cursor": "#ff007f",
+  "colors": [
+    "#020207", "#0f0c24", "#1f1944", "#322769",
+    "#483993", "#604cc0", "#2a215e", "#19143a",
+    "#00bfff", "#ff007f", "#b500ff", "#00ff66",
+    "#0077ff", "#ff0055", "#7b2cbf", "#ffffff"
+  ]
+}

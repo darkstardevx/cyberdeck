@@ -3,7 +3,7 @@
 //! The command translation engine for the CYBERDECK system.
 //! This module converts raw input strings from the UI or environment
 //! into structured `CyberdeckCommand` variants for the dispatcher.
-
+//!
 #![warn(missing_docs)]
 
 use crate::types::CyberdeckCommand;

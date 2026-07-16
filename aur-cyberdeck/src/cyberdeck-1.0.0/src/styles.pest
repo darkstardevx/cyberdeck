@@ -1,0 +1,21 @@
+// The entire file structure
+stylesheet = { SOI ~ command* ~ EOI }
+
+// A command is now a standard style block OR a media block
+command = { media_block | style_block }
+
+// Standard Style Block
+style_block = { "style" ~ selector ~ declaration* ~ "end" }
+selector    = @{ (ASCII_ALPHA | "-" | "_" | "." | "#" | ":" | " ")+ }
+
+// Universal declaration rule
+declaration = { property ~ "=" ~ "{" ~ value ~ "}" }
+property    = @{ (ASCII_ALPHA | "-")+ }
+value       = @{ (!"}" ~ ANY)* }
+
+// New Media Block Rule: media [query] [inner style blocks] end
+media_block = { "media" ~ media_query ~ style_block* ~ "end" }
+media_query = @{ (!"\n" ~ !"{" ~ ANY)+ }
+
+// Automatically ignore all spaces, tabs, and newlines between tokens
+WHITESPACE = _{ " " | "\t" | "\r" | "\n" }

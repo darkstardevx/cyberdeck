@@ -1,0 +1,14 @@
+{
+  "name": "Cyberdyne_Bio_Reactor",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "bio-mechanical",
+  "background": "#040904",
+  "foreground": "#00ff66",
+  "cursor": "#ff007f",
+  "colors": [
+    "#020402", "#0b1c0b", "#163816", "#235723",
+    "#337e33", "#45ab45", "#1c471c", "#102910",
+    "#00ff66", "#ff007f", "#00aa44", "#ff0055",
+    "#33ff88", "#ff44a0", "#081208", "#ffffff"
+  ]
+}

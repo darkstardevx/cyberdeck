@@ -1,0 +1,14 @@
+{
+  "name": "Cyberpunk_Static_Void",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "hacker",
+  "background": "#070707",
+  "foreground": "#e0e0e0",
+  "cursor": "#00ffaa",
+  "colors": [
+    "#030303", "#121212", "#242424", "#383838",
+    "#4c4c4c", "#636363", "#2c2c2c", "#1c1c1c",
+    "#00ffaa", "#ff007f", "#00aa77", "#b50055",
+    "#55ffcc", "#ff66b2", "#121212", "#ffffff"
+  ]
+}

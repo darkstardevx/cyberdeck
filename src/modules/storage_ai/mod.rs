@@ -7,6 +7,12 @@
 //! - **Predictive Analytics**: Hooks into `smartctl` for hardware health.
 //! - **Layered Reporting**: Separates raw logs from human-readable intelligence.
 
+//-NOTE: Storage Intelligence (AI Mode) (/src/modules/storage_ai/mod.rs)
+//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+//-END
+
 use crate::types::CyberdeckState;
 use std::fs;
 use std::process::Command;

@@ -1,0 +1,15 @@
+{
+  "name": "Synthwave Dark City",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "neon",
+  "background": "#0b0c10",
+  "foreground": "#c5cbd3",
+  "cursor": "#ff0055",
+  "colors": [
+    "#08090a", "#121417", "#1c1f24", "#2b303a",
+    "#3a414e", "#4e5769", "#2d333f", "#1f232b",
+    "#00ffcc", "#ff0055", "#ff00aa", "#9d00ff",
+    "#00bfff", "#ff5500", "#7b2cbf", "#ffffff"
+  ]
+}
+

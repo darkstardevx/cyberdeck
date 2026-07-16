@@ -1,0 +1,14 @@
+{
+  "name": "Synthwave_Vapor_Glow",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "neon",
+  "background": "#0b0512",
+  "foreground": "#ff7ff5",
+  "cursor": "#8000ff",
+  "colors": [
+    "#050209", "#150a21", "#28123e", "#3f1d61",
+    "#5a2a8b", "#7938ba", "#351552", "#200d31",
+    "#ff7ff5", "#8000ff", "#00ffff", "#ff00aa",
+    "#ffb3ff", "#c77dff", "#1c0033", "#ffffff"
+  ]
+}

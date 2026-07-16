@@ -1,8 +1,10 @@
 [book]
+title = "CYBERDECK"
 authors = ["Darkstar"]
+description = "System Documentation"
 language = "en"
-src = "src"
-title = "Cyberdeck System Manual"
 
 [output.html]
-git-repository-url = ""
+additional-css = ["theme/book.css"]
+no-section-label = true
+

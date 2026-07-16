@@ -1,0 +1,14 @@
+{
+  "name": "Synthwave_Laser_Tag",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "neon",
+  "background": "#060606",
+  "foreground": "#39ff14",
+  "cursor": "#ff007f",
+  "colors": [
+    "#030303", "#141414", "#262626", "#3d3d3d",
+    "#575757", "#737373", "#2e2e2e", "#1c1c1c",
+    "#39ff14", "#ff007f", "#00ffff", "#ffff00",
+    "#00ffcc", "#ff00aa", "#6a0dad", "#ffffff"
+  ]
+}

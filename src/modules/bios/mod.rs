@@ -11,6 +11,12 @@
 //! - **Real-time Metrics**: Uses `sysfs` to poll frequency governors and current
 //!   core frequencies.
 
+//-NOTE: BIOS & System Intelligence Module (/src/modules/bios/mod.rs)
+//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+//-END
+
 use std::fs::{self, OpenOptions};
 use std::process::Command;
 use std::io::Write;

@@ -1,7 +1,32 @@
 //! # CYBERDECK Core
+//!
 //! The entry point and primary controller for the CYBERDECK system.
-
+//! This module acts as the "Kernel," managing the asynchronous runtime,
+//! system state synchronization, and the HTTP API routing interface.
+//!
 #![warn(missing_docs)]
+
+//-NOTE: Cyberdeck Core (src/main.rs)
+//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+//-END
+
+//-SEC: TLS_Requirements
+//- Ensure all outgoing packets are encrypted with AES-256.
+//- We are currently using plaintext for testing;
+//- MUST replace before production push.
+//-END
+
+//-REF: API_Specs
+//- https://docs.cyberdeck-internal.io/v1/network-protocol
+//- Refer to page 4 for the handshake sequence details.
+//-END
+
+//-TODO: Database_Optimization
+//- Move the connection pool initialization to the startup
+//- routine instead of lazy loading it.
+//-END
 
 mod types;
 mod parser;
@@ -16,7 +41,8 @@ use tokio::sync::Mutex;
 use crate::parser::parse_cyberdeck_script;
 use tower_http::services::ServeDir; // 1. Added import
 
-/// Primary entry point.
+//-NOTE: Primary entry point. (src/main.rs)
+//-END
 #[tokio::main]
 async fn main() {
     tracing_subscriber::fmt::init();
@@ -36,6 +62,7 @@ async fn main() {
         dispatcher::execute_cyberdeck_command(cmd, &state).await;
     }
 
+    //-ROUTES: Main_Routes (src/main.rs)
     let app = Router::new()
     .route("/api/themes", get(routes::get_themes_list))
     .route("/", get(routes::get_index_page))
@@ -46,10 +73,14 @@ async fn main() {
     .route("/cyberdeck/api/list", get(routes::list_diagnostics))
     .fallback_service(ServeDir::new("static"))
     .with_state(state);
+    //-END
 
+    //-PORTS: Port_IP [127.0.0.1:8080] (src/main.rs)
     let port = std::env::var("CYBERDECK_PORT").unwrap_or_else(|_| "8080".to_string());
     let listener = tokio::net::TcpListener::bind(format!("127.0.0.1:{}", port)).await.unwrap();
 
     println!("[Cyberdeck Core] API active on http://127.0.0.1:{}", port);
     axum::serve(listener, app).await.unwrap();
+    //-END
+
 }

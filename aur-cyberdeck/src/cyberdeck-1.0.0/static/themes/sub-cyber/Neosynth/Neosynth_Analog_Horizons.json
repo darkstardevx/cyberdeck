@@ -1,0 +1,14 @@
+{
+  "name": "Neosynth_Analog_Horizons",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "neon",
+  "background": "#05060d",
+  "foreground": "#22edc7",
+  "cursor": "#fe019a",
+  "colors": [
+    "#020306", "#0d1021", "#1a1f3d", "#28305c",
+    "#38437d", "#4b5aa1", "#20274f", "#121730",
+    "#22edc7", "#fe019a", "#1b03f5", "#ffff33",
+    "#00ffaa", "#ff00ff", "#5500ff", "#ffffff"
+  ]
+}

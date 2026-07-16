@@ -6,6 +6,12 @@
 //! - **DMI Extraction**: Requires root (sudo) for full hardware data.
 //! - **Graceful Failure**: If run without sudo, it captures what it can and flags restricted access.
 
+//-NOTE: Motherboard Intelligence (/src/modules/motherboard/mod.rs)
+//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+//-END
+
 use std::fs;
 use std::process::Command;
 use crate::types::CyberdeckState;

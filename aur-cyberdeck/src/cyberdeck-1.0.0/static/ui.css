@@ -1,0 +1,271 @@
+/* ==========================================================================
+ *  1. VARIABLES & GLOBALS
+ *  ========================================================================== */
+:root {
+    --bg-main: #000000;
+    --bg-card: #050507;
+    --border-color: #16181f;
+    --text-primary: #f1f5f9;
+    --text-muted: #525865;
+    --accent-cyan: #06b6d4;
+    --accent-purple: #7c3aed;
+    --accent-amber: #f59e0b;
+    --danger: #ff3e3e;
+}
+
+body {
+    font-family: 'Courier New', monospace;
+    background: var(--bg-main);
+    color: var(--text-primary);
+    padding: 20px;
+    min-height: 100vh;
+    background-image:
+    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%),
+    linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+    background-size: 100% 4px, 3px 100%;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-card); }
+::-webkit-scrollbar-thumb {
+    background: var(--accent-purple);
+    border: 1px solid var(--accent-cyan);
+    box-shadow: 0 0 10px var(--accent-purple);
+}
+
+/* ==========================================================================
+ *  2. TYPOGRAPHY
+ *  ========================================================================== */
+h2 {
+    color: var(--accent-cyan);
+    text-shadow: 0 0 10px rgba(6, 182, 212, 0.35);
+    border-bottom: 2px solid var(--accent-purple);
+    padding-bottom: 10px;
+    letter-spacing: 2px;
+}
+
+h3 { color: var(--accent-purple); margin-top: 30px; }
+h4 { color: var(--accent-cyan); margin-top: 20px; }
+
+/* ==========================================================================
+ *  3. BUTTONS & CONTROLS
+ *  ========================================================================== */
+button {
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    padding: 14px;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: monospace;
+    text-transform: uppercase;
+    transition: all 0.2s ease-in-out;
+}
+
+button:hover {
+    background: var(--accent-cyan);
+    color: var(--bg-main);
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 15px var(--accent-cyan);
+}
+
+/* Nav/Action specific buttons */
+.nav-btn {
+    background: #222;
+    color: var(--danger);
+    border: 1px solid var(--danger);
+    width: 100%;
+    padding: 10px;
+}
+
+/* ==========================================================================
+ *  4. LAYOUT COMPONENTS (Panels & Lists)
+ *  ========================================================================== */
+.panel {
+    border: 1px solid var(--border-color);
+    padding: 15px;
+    background: var(--bg-card);
+    margin-top: 20px;
+    box-shadow: 0 0 10px rgba(124, 58, 237, 0.1);
+}
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 15px; }
+
+/* File Viewer List Row */
+.file-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 10px;
+    border-bottom: 1px solid #333;
+    font-size: 14px;
+}
+
+.file-row button {
+    padding: 4px 10px;
+    font-size: 12px;
+    margin-left: 10px;
+}
+
+/* ==========================================================================
+ *  5. OVERLAY LOGIC (The "Fix" for your Window sizing)
+ *  ========================================================================== */
+/* 1. Base Overlay - Reset any generic size rules */
+/* 1. Force the overlay to float */
+#overlay-panel {
+display: none; /* Hidden by default */
+position: fixed; /* Floats over everything */
+top: 0;
+left: 0;
+width: 100vw;
+height: 100vh;
+background: rgba(0, 0, 0, 0.9); /* Dim the background */
+z-index: 9999; /* Forces it to the top layer */
+justify-content: center;
+align-items: center;
+flex-direction: column;
+}
+
+/* 2. Style the actual box */
+#overlay-panel.visible {
+display: flex; /* Only shown when class 'visible' is present */
+}
+
+/* Ensure the box has dimensions when visible */
+#overlay-panel > div, #overlay-panel > h3 {
+background: #000;
+border: 1px solid var(--accent-cyan);
+padding: 20px;
+max-width: 80%;
+}
+
+/* 2. Compact Mode (Menu) */
+.panel-compact {
+    width: 300px;
+    height: auto;
+    display: block;
+}
+
+/* 3. Expanded Mode (Files) */
+.panel-expanded {
+    width: 80vw;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Helper to prevent Alpine flash-of-content */
+[x-cloak] { display: none !important; }
+
+.file-list {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.controls {
+    flex-shrink: 0;
+    display: flex;
+    gap: 10px;
+}
+
+/* ==========================================================================
+ *  6. UTILITIES & ANIMATIONS
+ *  ========================================================================== */
+@keyframes glitch {
+    0% { transform: translate(0); }
+    50% { transform: translate(-2px, 1px); }
+    100% { transform: translate(0); }
+}
+
+#theme-selector {
+background-color: var(--bg-card);
+color: var(--text-primary);
+border: 1px solid var(--border-color);
+padding: 8px 12px;
+cursor: pointer;
+}
+
+/* ==========================================================================
+ *  7. MODAL OVERLAY
+ *  ========================================================================== */
+/* The background dimming layer */
+* Overlay sits on top but passes clicks through to the window */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.9); z-index: 9999;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: auto; /* Ensure overlay receives clicks for closing */
+}
+
+/* Modal content must explicitly accept pointer events */
+.modal-content {
+    background: #000; border: 2px solid var(--accent-cyan, #00ffff);
+    padding: 20px; width: 80%; max-width: 600px;
+    pointer-events: auto; /* Crucial: This ensures buttons inside are clickable */
+    position: relative;
+}
+
+/* The actual window */
+.modal-window {
+    width: 80vw !important;
+    max-height: 80vh !important;
+    background: #0d0d0d !important;
+    border: 2px solid var(--accent-cyan, #00ffff) !important;
+    padding: 20px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow-y: auto !important;
+}
+
+/* Hide when inactive */
+[x-cloak] { display: none !important; }
+
+/* 1. Force the Headless UI overlay to show */
+[x-dialog] {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.8); /* Darken the background */
+    z-index: 9999 !important;    /* Push to absolute top */
+}
+
+/* 2. Ensure your custom panel styles override standard div rules */
+.panel-compact,
+.panel-expanded {
+    display: block !important;
+    position: relative;
+    z-index: 10000;
+    margin: auto; /* Centers the box */
+}
+
+/* ==========================================================================
+ *  8. LOG MODAL OVERLAY
+ *  ========================================================================== */
+.log-overlay {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0, 0, 0, 0.95); /* Deeper black */
+    z-index: 10000; display: flex; align-items: center; justify-content: center;
+}
+
+/* The Terminal Window */
+.log-terminal {
+    width: 70vw; height: 70vh;
+    background: #050505 !important; /* Hardcoded dark */
+    border: 1px solid #333 !important;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+    font-family: 'Courier New', Courier, monospace !important;
+    color: #00ff41 !important; /* Classic terminal green */
+    font-size: 0.85rem !important; /* Smaller font */
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.log-terminal h3 { color: #fff !important; border-bottom: 1px solid #00ff41; padding-bottom: 10px; }
+.log-terminal ul { list-style: none; padding: 0; }
+.log-terminal li { margin-bottom: 5px; opacity: 0.8; }

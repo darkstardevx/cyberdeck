@@ -1,0 +1,14 @@
+{
+  "name": "Cyberpunk_Sub_Grid_Zero",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "hacker",
+  "background": "#030809",
+  "foreground": "#00ffcc",
+  "cursor": "#39ff14",
+  "colors": [
+    "#010405", "#061417", "#0d262d", "#163c46",
+    "#215462", "#2d7082", "#12343d", "#0a2026",
+    "#00ffcc", "#39ff14", "#00a88f", "#00ff66",
+    "#66ffd9", "#99ffbb", "#061317", "#ffffff"
+  ]
+}

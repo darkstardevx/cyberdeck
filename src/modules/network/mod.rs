@@ -1,7 +1,13 @@
-//! # Network & Connectivity Intelligence
+//! # CYBERDECK: Network & Connectivity Intelligence
 //!
 //! Unified module for probing system-wide networking. Handles interface telemetry,
 //! routing tables, DNS resolution, and driver/hardware auditing.
+
+//-NOTE: Network & Connectivity Intelligence (/src/modules/network/mod.rs)
+//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+//-END
 
 use std::fs::{self, OpenOptions};
 use std::process::Command;

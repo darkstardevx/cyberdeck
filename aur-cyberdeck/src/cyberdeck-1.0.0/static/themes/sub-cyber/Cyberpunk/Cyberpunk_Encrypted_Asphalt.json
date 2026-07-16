@@ -1,0 +1,14 @@
+{
+  "name": "Cyberpunk_Encrypted_Asphalt",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "hacker",
+  "background": "#0b0c10",
+  "foreground": "#c5cbd3",
+  "cursor": "#00ffff",
+  "colors": [
+    "#050608", "#11141a", "#1f242e", "#2f3645",
+    "#414b5f", "#56637d", "#252b37", "#161a21",
+    "#00ffff", "#ff0055", "#708090", "#495057",
+    "#66ffff", "#ff6699", "#12141a", "#ffffff"
+  ]
+}

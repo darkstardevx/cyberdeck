@@ -1,0 +1,14 @@
+{
+  "name": "Dystopian_Ministry_Sec",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "dystopian",
+  "background": "#0b0c10",
+  "foreground": "#9aa0a6",
+  "cursor": "#cc0000",
+  "colors": [
+    "#050608", "#14161c", "#242730", "#373b4a",
+    "#4d5266", "#646b85", "#2b2e3b", "#1a1c24",
+    "#cc0000", "#5c6273", "#777f94", "#404552",
+    "#ff3333", "#bdc2cf", "#101114", "#ffffff"
+  ]
+}

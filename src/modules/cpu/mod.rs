@@ -9,6 +9,12 @@
 //! - **RAPL (Power)**: Attempts to read energy counters from `/sys/class/powercap/`.
 //! - **Scaling**: Monitors frequency governors and scaling limits.
 
+//-NOTE: CPU Diagnostic Module (/src/modules/cpu/mod.rs)
+//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+//-END
+
 use std::fs;
 use std::process::Command;
 use crate::types::CyberdeckState;

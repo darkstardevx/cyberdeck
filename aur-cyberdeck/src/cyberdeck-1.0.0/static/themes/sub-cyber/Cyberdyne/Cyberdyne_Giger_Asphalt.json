@@ -1,0 +1,14 @@
+{
+  "name": "Cyberdyne_Giger_Asphalt",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "bio-mechanical",
+  "background": "#0d0d0f",
+  "foreground": "#9fa4a6",
+  "cursor": "#4b5320",
+  "colors": [
+    "#060608", "#16161a", "#26272e", "#3a3c47",
+    "#515463", "#6b6f82", "#2e303b", "#1a1b21",
+    "#4b5320", "#6b705c", "#3d405b", "#222223",
+    "#8b9467", "#a3b18a", "#141416", "#ffffff"
+  ]
+}

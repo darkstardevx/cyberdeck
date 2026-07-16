@@ -43,4 +43,39 @@ We integrated **HeadlessUI** to ensure the interface is accessible and robust.
 * **Unstyled Components:** Because CYBERDECK requires a specific aesthetic, HeadlessUI gives us the *logic* (the "headless" part) but leaves the *styling* entirely up to us, ensuring the UI remains perfectly in character.
 
 ## [1.0.0] - 2026-07-14
-* **Moved from Alpha to Stable**
+
+### Added
+- **Archive System:** Fully implemented backend compression (zip, tar, gzip, 7z) for diagnostic data.
+- **Observability:** Integrated `tracing` and `tracing-subscriber` for robust asynchronous logging.
+- **Timestamping:** Implemented `chrono` for automated, unique archival filenames (`archive_YYYY-MM-DD.ext`).
+- **Frontend:** Integrated Alpine.js and HeadlessUI to handle UI interactivity and state management.
+
+### Changed
+- **Stable Milestone:** Promoted version from `alpha` to `stable`. The CYBERDECK core is now considered feature-complete and production-ready.
+- **Output Management:** Redirected all generated archive assets to the `./output/` directory.
+- **Project Scope:** Official move from alpha testing phase to v1.0.0 stable release.
+
+### Fixed
+- **Serialization:** Resolved critical `serde` deserialization issues (unknown variant errors) in the command dispatcher.
+- **Code Hygiene:** Removed all unused imports and dead code across `dispatcher.rs`, `routes.rs`, and audio modules.
+- **Build Integrity:** Resolved all compiler warnings; project now compiles with zero warnings/dead code.
+
+---
+
+### Notes: The Road to Stable
+This release marks the transition of CYBERDECK from an experimental alpha to a stable, reliable system. The codebase has been audited for memory safety, logging transparency, and architectural cleanliness. The system is now ready for deployment and package management integration (AUR/Nix/etc.).
+
+---
+## [1.1.0] - 2026-07-15
+### Added
+- **mdBook Infrastructure:** Initialized `docs/` directory for system documentation.
+- **Auto-Summary Generator:** Integrated `build.rs` script to dynamically generate `SUMMARY.md` from code snippets.
+- **Custom Theming:** Added CSS support for project styling and readability.
+
+### Changed
+- **Build Workflow:** Automated documentation pipeline triggered on every `cargo build`.
+- **Documentation Structure:** Standardized file naming and organizational structure for better maintainability.
+
+### Fixed
+- **Configuration:** Resolved `book.toml` deserialization errors regarding CSS and chapter numbering.
+- **Build Pathing:** Cleaned up technical noise from generated filenames.

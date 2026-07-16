@@ -8,6 +8,12 @@
 //! - **Categorization**: Heuristic-based grouping (Web, DB, Infra, Security).
 //! - **Reporting**: Generates a formatted markdown report of running processes.
 
+//-NOTE: Service Intelligence Module (/src/modules/services/mod.rs)
+//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+//-END
+
 use std::fs;
 use std::process::Command;
 use crate::types::CyberdeckState;

@@ -1,0 +1,14 @@
+{
+  "name": "Dystopian_Brutalist_Block",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "dystopian",
+  "background": "#121414",
+  "foreground": "#b2b8b8",
+  "cursor": "#ff3b30",
+  "colors": [
+    "#090a0a", "#1a1e1e", "#2c3333", "#404a4a",
+    "#566363", "#6e7e7e", "#333c3c", "#212626",
+    "#ff3b30", "#788282", "#9ca6a6", "#4f5555",
+    "#ff6b63", "#d1d9d9", "#151717", "#ffffff"
+  ]
+}

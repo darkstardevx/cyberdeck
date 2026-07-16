@@ -3,6 +3,12 @@
 //! This module provides deep introspection capabilities for the system's audio stack,
 //! specifically targeting PipeWire, WirePlumber, and PulseAudio compatibility layers.
 
+//-NOTE: Audio Diagnostics Module (/src/modules/audio/mod.rs)
+//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+//-END
+
 use crate::types::CyberdeckState;
 use crate::modules::utils::write_header; // Assuming your helper is here
 use std::fs::{self, OpenOptions, File};

@@ -1,0 +1,14 @@
+{
+  "name": "Cyberdyne_Neural_Link",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "bio-mechanical",
+  "background": "#05060f",
+  "foreground": "#00f0ff",
+  "cursor": "#bd00ff",
+  "colors": [
+    "#020308", "#0f1224", "#1e2444", "#2f3967",
+    "#42508e", "#586aba", "#252d54", "#151a33",
+    "#00f0ff", "#bd00ff", "#0044ff", "#7000ff",
+    "#00bcff", "#d600ff", "#0b0d19", "#ffffff"
+  ]
+}

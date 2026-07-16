@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CYBERDECK Core</title>
+    <link rel="stylesheet" href="ui.css">
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        [x-cloak] { display: none !important; }
+
+        .modal-overlay, .log-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.9); z-index: 9999;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .modal-content {
+            background: #000; border: 2px solid var(--accent-cyan, #00ffff);
+            padding: 20px; width: 80%; max-width: 600px;
+        }
+
+        .log-terminal {
+            width: 70vw; height: 70vh;
+            background: #050505 !important;
+            border: 1px solid #333 !important;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+            font-family: 'Courier New', Courier, monospace !important;
+            color: #00ff41 !important;
+            font-size: 0.85rem !important;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+
+    <script>
+        // --- Theme & Command Logic Remains Same ---
+        async function loadThemeList() {
+            const selector = document.getElementById('theme-selector');
+            if (!selector) return;
+            try {
+                const response = await fetch('/api/themes');
+                if (!response.ok) throw new Error('Failed to fetch themes');
+                const themeData = await response.json();
+                selector.innerHTML = '<option value="reset">-- DEFAULT (CYBERDECK) --</option>';
+                for (const [folder, files] of Object.entries(themeData)) {
+                    const group = document.createElement('optgroup'); group.label = folder;
+                    files.forEach(fileName => {
+                        const option = document.createElement('option');
+                        option.value = `${folder}/${fileName}`; option.textContent = fileName;
+                        group.appendChild(option);
+                    });
+                    selector.appendChild(group);
+                }
+            } catch (err) { console.error("Error loading theme list:", err); }
+        }
+
+        async function applySelectedTheme() {
+            const selector = document.getElementById('theme-selector');
+            const value = selector.value;
+            if (!value) return;
+            if (value === "reset") { localStorage.removeItem('selectedTheme'); window.location.reload(); return; }
+            const [folder, theme] = value.split('/');
+            const path = `/themes/sub-cyber/${folder}/${theme}.json`;
+            try {
+                const response = await fetch(path);
+                const data = await response.json();
+                const themeMap = { "background": "bg-main", "foreground": "text-primary" };
+                for (const [jsonKey, cssVarName] of Object.entries(themeMap)) {
+                    if (data[jsonKey]) document.documentElement.style.setProperty(`--${cssVarName}`, data[jsonKey]);
+                }
+                if (Array.isArray(data.colors)) {
+                    const colors = data.colors;
+                    if (colors[9]) document.documentElement.style.setProperty('--accent-cyan', colors[9]);
+                    if (colors[11]) document.documentElement.style.setProperty('--accent-purple', colors[11]);
+                    if (colors[10]) document.documentElement.style.setProperty('--accent-amber', colors[10]);
+                }
+                localStorage.setItem('selectedTheme', value);
+            } catch (err) { console.error("Failed to apply theme:", err); }
+        }
+
+        async function sendCommand(command, btn) {
+            const originalText = btn.innerText;
+            btn.innerText = "⚡ EXECUTING..."; btn.disabled = true;
+            try {
+                const res = await fetch('/cyberdeck/api/command', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(command)
+                });
+                if (res.ok) { btn.style.background = "var(--accent-cyan)"; btn.innerText = "✅ COMPLETE"; setTimeout(() => window.location.reload(), 800); }
+                else { throw new Error(await res.text()); }
+            } catch (err) { alert('System Error: ' + err.message); btn.innerText = originalText; btn.disabled = false; }
+        }
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            await loadThemeList();
+            const saved = localStorage.getItem('selectedTheme');
+            if (saved) { const selector = document.getElementById('theme-selector'); selector.value = saved; applySelectedTheme(); }
+        });
+    </script>
+</head>
+<body>
+    <h2>⚡ CYBERDECK ⚡</h2>
+
+    <div class="control-panel">
+        <select id="theme-selector" onchange="applySelectedTheme()">
+            <option value="">Loading themes...</option>
+        </select>
+    </div>
+
+    <div x-data="{
+        isOpen: false,
+        isFeedOpen: false,
+        currentView: 'menu',
+        files: [],
+        logs: [],
+        syncLogs() {
+            // Scrapes the existing log list from the DOM and loads it into the modal
+            this.logs = Array.from(document.querySelectorAll('#log-source li')).map(li => li.innerText);
+        }
+    }" @keydown.escape.window="isOpen = false; isFeedOpen = false">
+
+        <div style="margin: 20px 0;">
+            <button @click="isOpen = true" style="border: 2px solid var(--accent-amber);">⚡ ACCESS DATA TERMINAL</button>
+            <button @click="isFeedOpen = true; syncLogs()" style="border: 2px solid #00ff41; margin-left: 10px;">📟 LIVE SYSTEM FEED</button>
+        </div>
+
+        <div x-show="isOpen" x-cloak class="modal-overlay" @click.self="isOpen = false">
+    <div class="modal-content" x-data="{ archiveFormat: 'zip' }">
+
+        <div x-show="currentView === 'menu'">
+            <h3>[SYSTEM_COMMANDS]</h3>
+            <button @click="currentView = 'files'; fetch('/cyberdeck/api/list').then(r => r.json()).then(d => files = d);">📂 OPEN DIAGNOSTICS</button>
+            <button @click="currentView = 'archive'">📦 ARCHIVE FILES</button>
+            <button @click="isOpen = false">❌ CLOSE</button>
+        </div>
+
+        <div x-show="currentView === 'archive'">
+            <h3>[COMPRESSION_ENGINE]</h3>
+            <label style="display: block; margin-bottom: 10px;">SELECT FORMAT:</label>
+            <select x-model="archiveFormat" style="width: 100%; padding: 10px; background: #000; color: #fff; border: 1px solid var(--accent-cyan);">
+                <option value="zip">.ZIP (Standard)</option>
+                <option value="tar">.TAR (Uncompressed)</option>
+                <option value="gzip">.TAR.GZ (Compressed)</option>
+                <option value="7z">.7Z (High Compression)</option>
+            </select>
+
+            <div style="margin-top: 20px;">
+                <button
+    x-ref="archiveBtn"
+    @click="
+        console.log('--- BUTTON CLICKED ---');
+        $el.innerText = 'CLICKED!';
+        sendCommand({ 'ArchiveFiles': archiveFormat }, $el);
+    "
+>
+    ⚡ EXECUTE COMPRESSION
+</button>
+                <button @click="currentView = 'menu'">BACK</button>
+            </div>
+        </div>
+
+        <div x-show="currentView === 'files'" style="display: flex; flex-direction: column;">
+            <h3>[FILE_SYSTEM]</h3>
+            <div style="flex: 1; overflow-y: auto; max-height: 300px;">
+                <template x-for="file in files" :key="file">
+                    <div style="display: flex; justify-content: space-between; padding: 5px 0;">
+                        <span x-text="file"></span>
+                        <button @click="navigator.clipboard.writeText('./diagnostics/' + file); alert('Copied: ' + file)">CPY</button>
+                    </div>
+                </template>
+            </div>
+            <div style="margin-top: 20px;">
+                <button @click="currentView = 'menu'">BACK</button>
+                <button @click="isOpen = false">CLOSE</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <div x-show="isFeedOpen" x-cloak class="log-overlay" @click.self="isFeedOpen = false">
+            <div class="log-terminal">
+                <h3>[LIVE_SYSTEM_FEED_DUMP]</h3>
+                <div style="flex: 1; overflow-y: auto;">
+                    <ul>
+                        <template x-for="log in logs" :key="log">
+                            <li x-text="log"></li>
+                        </template>
+                    </ul>
+                </div>
+                <button @click="isFeedOpen = false" style="margin-top: 20px; background: #111; color: #00ff41; border: 1px solid #00ff41;">CLOSE_TERMINAL</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <strong>DISPLAY STATUS:</strong> <span class="status-val">{{DISPLAY_STATUS}}</span> |
+        <strong>STEALTH MODE:</strong> <span class="status-val">{{STEALTH_MODE}}</span> |
+        <strong>REPORTS DETECTED:</strong> <span class="status-val">{{REPORTS_COUNT}}</span>
+    </div>
+
+    <h3>🔮 DISPATCH INFRASTRUCTURE SCANS</h3>
+    <div class="grid" id="button-container"></div>
+
+    <script>
+        const modules = [
+            { label: "🖥️ PROBE HARDWARE CORE", cmd: "RunHardwareModule" },
+            { label: "🔌 MEASURE POWER DRAW", cmd: "RunPowerModule" },
+            { label: "🧠 MAP MEMORY BANKS", cmd: "RunMemoryModule" },
+            { label: "🤖 EXECUTE STORAGE AI", cmd: "RunStorageAiModule" },
+            { label: "🌡️ MONITOR THERMAL ARRAY", cmd: "RunThermalModule" },
+            { label: "🌐 TRACE NETWORK NODES", cmd: "RunNetworkModule" },
+            { label: "🌬️ SYNC FAN VELOCITY", cmd: "RunFanModule" },
+            { label: "🎧 DIAGNOSE AUDIO SINKS", cmd: "RunAudioModule" },
+            { label: "📟 INTERROGATE BIOS LAYERS", cmd: "RunBiosModule" },
+            { label: "💽 ANALYZE DISK TOPOLOGY", cmd: "RunDisksModule" },
+            { label: "🔋 AUDIT BATTERY HEALTH", cmd: "RunBatteryModule" },
+            { label: "⚙️ INSPECT SYSTEM DAEMONS", cmd: "RunServicesModule" },
+            { label: "🧩 QUERY MAINBOARD BUS", cmd: "RunMotherboardModule" }
+        ];
+        const container = document.getElementById('button-container');
+        modules.forEach(mod => {
+            const btn = document.createElement('button');
+            btn.textContent = mod.label;
+            btn.onclick = () => sendCommand({ [mod.cmd]: './diagnostics' }, btn);
+            container.appendChild(btn);
+        });
+    </script>
+
+    <div style="display: none;">
+    <ul id="log-source">{{SYSTEM_LOGS}}</ul>
+</div>
+</body>
+</html>

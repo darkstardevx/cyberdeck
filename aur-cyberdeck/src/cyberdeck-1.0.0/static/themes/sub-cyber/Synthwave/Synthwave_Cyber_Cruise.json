@@ -1,0 +1,14 @@
+{
+  "name": "Synthwave_Cyber_Cruise",
+  "author": "Darkstar [darkstardevx@gmail.com]",
+  "category": "neon",
+  "background": "#04050f",
+  "foreground": "#00bfff",
+  "cursor": "#fe019a",
+  "colors": [
+    "#020207", "#0d1030", "#1a2054", "#2a337a",
+    "#3b49a3", "#4f62cf", "#212861", "#14183b",
+    "#00bfff", "#fe019a", "#711c91", "#0ffe6b",
+    "#0077ff", "#ff0055", "#4d0099", "#ffffff"
+  ]
+}

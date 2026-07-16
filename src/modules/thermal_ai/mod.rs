@@ -1,4 +1,4 @@
-//! # CYBERDECK: Thermal Intelligence
+//! # CYBERDECK: Thermal Intelligence (AI Mode)
 //!
 //! Monitors system thermal zones and provides a fallback to lm-sensors
 //! for detailed hardware temperature auditing.
@@ -7,6 +7,12 @@
 //! - **Direct Kernel Access**: Reads raw thermal data from `/sys/class/thermal`.
 //! - **Predictive Analytics**: Tracks peak temperatures across all detected zones.
 //! - **Fallback**: Automatically defaults to `sensors` CLI if sysfs nodes are unavailable.
+
+//-NOTE: Thermal Intelligence (AI Mode) (/src/modules/thermal_ai/mod.rs)
+//- Use these new "tags" for code blocks and notes.
+//- Tag reference in build.rs
+//- Files are saved to /snippets/{code, notes} in markdown (.md) format.
+//-END
 
 use std::fs;
 use std::process::Command;
