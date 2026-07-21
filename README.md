@@ -6,7 +6,8 @@
 
 > **Status:** *Under Active Development* | **Language:** Rust *(2021)*
 > 
-> **Current Version:** **v0.1.0-alpha.5** *(SemVer)*
+> **Current Version:**
+> [Stable v1.1.0] (https://github.com/darkstardevx/cyberdeck/releases/tag/v1.1.0) 
 > 
 > **🛡️ <mark>Engineering Note</mark>: [Stack Stability]**
 
