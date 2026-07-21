@@ -1,6 +1,6 @@
 # 📟 CYBERDECK
 
-### *The Ultimate Systems Intelligence Framework*
+### *Systems Intelligence Framework (Arch Linux / Debian)*
 
 <img src="images/screenshot.png" alt="Cyberdeck Screenshot" width="800">
 
