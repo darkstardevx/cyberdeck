@@ -33,6 +33,7 @@ mod parser;
 mod modules;
 mod dispatcher;
 mod routes;
+mod cybergrid;
 
 use crate::types::CyberdeckState;
 use axum::{routing::{get, post}, Router};
@@ -65,6 +66,8 @@ async fn main() {
     //-ROUTES: Main_Routes (src/main.rs)
     let app = Router::new()
     .route("/api/themes", get(routes::get_themes_list))
+    .route("/api/cybergrid/themes", get(cybergrid::list_themes))
+    .route("/api/cybergrid/css/:name", get(cybergrid::theme_css))
     .route("/", get(routes::get_index_page))
     // Updated paths to /cyberdeck/api/
     .route("/cyberdeck/api/state", get(routes::get_cyberdeck_state))

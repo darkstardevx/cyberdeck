@@ -260,12 +260,22 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "773648b94d0e5d620f64f280777445740e61fe701025087ec8b57f45c791888b"
 
 [[package]]
+name = "cybercore"
+version = "0.2.1"
+source = "git+https://github.com/darkstardevx/cybercore.git?tag=v0.2.1#10fda626d1ccbfa5a0887f67b20acece51ce57ea"
+dependencies = [
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "cyberdeck_core"
 version = "1.0.0"
 dependencies = [
  "axum",
  "chrono",
  "clap",
+ "cybercore",
  "dirs",
  "open",
  "regex",
