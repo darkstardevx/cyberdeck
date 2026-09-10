@@ -34,15 +34,26 @@
     </style>
 
     <script>
-        // --- Theme & Command Logic Remains Same ---
+        // --- Theme & Command Logic ---
+        // CYBERGRID (cybercore schema v2) role -> CYBERDECK CSS variable
+        const CYBERGRID_MAP = {
+            bg: 'bg-main', panel: 'bg-card', line: 'border-color',
+            white: 'text-primary', muted: 'text-muted',
+            cyan: 'accent-cyan', purple: 'accent-purple', orange: 'accent-amber',
+            red: 'danger', acid_green: 'accent-acid', hot_pink: 'accent-pink'
+        };
+        window.__cybergrid = {}; // { name: {bg, white, ...} }
+
         async function loadThemeList() {
             const selector = document.getElementById('theme-selector');
             if (!selector) return;
+            selector.innerHTML = '<option value="reset">-- DEFAULT (CYBERDECK) --</option>';
+
+            // 1. file-based themes (static/themes/sub-cyber/**)
             try {
                 const response = await fetch('/api/themes');
                 if (!response.ok) throw new Error('Failed to fetch themes');
                 const themeData = await response.json();
-                selector.innerHTML = '<option value="reset">-- DEFAULT (CYBERDECK) --</option>';
                 for (const [folder, files] of Object.entries(themeData)) {
                     const group = document.createElement('optgroup'); group.label = folder;
                     files.forEach(fileName => {
@@ -53,6 +64,23 @@
                     selector.appendChild(group);
                 }
             } catch (err) { console.error("Error loading theme list:", err); }
+
+            // 2. shared CYBERGRID palettes (cybercore, core branch)
+            try {
+                const res = await fetch('/api/cybergrid/themes');
+                if (res.ok) {
+                    const { active, themes } = await res.json();
+                    window.__cybergrid = Object.fromEntries(themes.map(t => [t.name, t]));
+                    const group = document.createElement('optgroup'); group.label = '⬢ CYBERGRID';
+                    themes.forEach(t => {
+                        const option = document.createElement('option');
+                        option.value = `cybergrid/${t.name}`;
+                        option.textContent = t.name + (t.name === active ? ' (active)' : '');
+                        group.appendChild(option);
+                    });
+                    selector.appendChild(group);
+                }
+            } catch (err) { console.error("CYBERGRID themes unavailable:", err); }
         }
 
         async function applySelectedTheme() {
@@ -60,6 +88,20 @@
             const value = selector.value;
             if (!value) return;
             if (value === "reset") { localStorage.removeItem('selectedTheme'); window.location.reload(); return; }
+
+            // CYBERGRID palette: map the 11 roles onto our CSS vars
+            if (value.startsWith('cybergrid/')) {
+                const t = window.__cybergrid[value.slice('cybergrid/'.length)];
+                if (t) {
+                    for (const [role, cssVar] of Object.entries(CYBERGRID_MAP)) {
+                        if (t[role]) document.documentElement.style.setProperty(`--${cssVar}`, `#${t[role]}`);
+                    }
+                    localStorage.setItem('selectedTheme', value);
+                }
+                return;
+            }
+
+            // file-based theme
             const [folder, theme] = value.split('/');
             const path = `/themes/sub-cyber/${folder}/${theme}.json`;
             try {
